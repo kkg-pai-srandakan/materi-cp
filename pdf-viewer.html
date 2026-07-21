@@ -5,71 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penampil PDF</title>
     <style>
-        body { margin: 0; background: #f1f5f3; display: flex; flex-direction: column; height: 100vh; }
-        #pdf-canvas { margin: auto; max-width: 100%; height: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .controls { text-align: center; padding: 8px; background: #fff; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: center; gap: 12px; align-items: center; }
-        button { background: #e7f4ec; border: 1px solid #a7d9bb; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; color: #0a4a2e; }
-        button:disabled { opacity: 0.5; cursor: default; }
-        span { font-size: 0.9rem; color: #475569; }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: #f1f5f3;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 16px;
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .controls button {
+            background: #e7f4ec;
+            border: 1px solid #a7d9bb;
+            padding: 8px 18px;
+            border-radius: 24px;
+            font-weight: 600;
+            color: #0a4a2e;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .controls button:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .controls button:active {
+            background: #d0e9da;
+        }
+        .page-info {
+            font-size: 0.9rem;
+            color: #334155;
+            min-width: 100px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .canvas-container {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 12px;
+            background: #f1f5f3;
+        }
+        canvas {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-radius: 6px;
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        .error-msg {
+            color: #475569;
+            text-align: center;
+            margin-top: 40px;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <div class="controls">
-        <button id="prevPage" disabled>← Sebelumnya</button>
-        <span id="pageInfo">Halaman 0 / 0</span>
-        <button id="nextPage" disabled>Berikutnya →</button>
+        <button id="prevPage">← Sebelumnya</button>
+        <span class="page-info" id="pageInfo">Memuat…</span>
+        <button id="nextPage">Berikutnya →</button>
     </div>
-    <canvas id="pdf-canvas"></canvas>
+    <div class="canvas-container" id="canvasContainer">
+        <canvas id="pdfCanvas"></canvas>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script>
         (function() {
+            // Ambil parameter file dari URL
             const params = new URLSearchParams(window.location.search);
             const fileUrl = params.get('file');
             if (!fileUrl) {
-                document.body.innerHTML = '<p style="text-align:center;margin-top:40px;">Tidak ada file PDF yang dipilih.</p>';
+                document.querySelector('.canvas-container').innerHTML = '<p class="error-msg">Tidak ada file PDF yang dipilih.</p>';
                 return;
             }
 
-            // Set worker (opsional, untuk performa lebih baik)
+            // Setup PDF.js worker
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
             let pdfDoc = null,
                 currentPage = 1,
                 totalPages = 0;
-            const canvas = document.getElementById('pdf-canvas');
+
+            const canvas = document.getElementById('pdfCanvas');
             const ctx = canvas.getContext('2d');
+            const container = document.getElementById('canvasContainer');
             const prevBtn = document.getElementById('prevPage');
             const nextBtn = document.getElementById('nextPage');
             const pageInfo = document.getElementById('pageInfo');
 
-            function renderPage(num) {
-                pdfDoc.getPage(num).then(page => {
-                    const viewport = page.getViewport({ scale: 1.5 });
-                    canvas.height = viewport.height;
+            // Fungsi render halaman dengan skala otomatis
+            async function renderPage(num) {
+                if (!pdfDoc) return;
+                try {
+                    const page = await pdfDoc.getPage(num);
+                    // Hitung skala agar lebar canvas = lebar container (dikurangi padding)
+                    const containerWidth = container.clientWidth - 24; // 12px padding kiri+kanan
+                    const viewportBase = page.getViewport({ scale: 1 });
+                    const scale = containerWidth / viewportBase.width;
+                    // Gandakan resolusi untuk tampilan tajam (devicePixelRatio)
+                    const sharpScale = scale * (window.devicePixelRatio || 1);
+                    const viewport = page.getViewport({ scale: sharpScale });
+
                     canvas.width = viewport.width;
-                    page.render({ canvasContext: ctx, viewport: viewport });
+                    canvas.height = viewport.height;
+                    canvas.style.width = (viewport.width / (window.devicePixelRatio || 1)) + 'px';
+                    canvas.style.height = (viewport.height / (window.devicePixelRatio || 1)) + 'px';
+
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
                     pageInfo.textContent = `Halaman ${num} / ${totalPages}`;
                     prevBtn.disabled = (num <= 1);
                     nextBtn.disabled = (num >= totalPages);
-                }).catch(err => {
-                    console.error('Gagal merender halaman:', err);
+                } catch (err) {
+                    console.error('Gagal render halaman:', err);
                     pageInfo.textContent = 'Gagal memuat halaman.';
-                });
+                }
             }
 
+            // Buka dokumen PDF
             pdfjsLib.getDocument(fileUrl).promise.then(pdf => {
                 pdfDoc = pdf;
                 totalPages = pdf.numPages;
                 if (totalPages > 0) {
                     currentPage = 1;
                     renderPage(currentPage);
+                } else {
+                    pageInfo.textContent = 'Dokumen kosong.';
                 }
             }).catch(err => {
-                console.error('Gagal membuka PDF:', err);
-                document.body.innerHTML = '<p style="text-align:center;margin-top:40px;">File PDF tidak dapat dibuka. Pastikan file tersedia.</p>';
+                console.error(err);
+                container.innerHTML = '<p class="error-msg">File PDF tidak dapat dibuka. Pastikan file tersedia dan tidak rusak.</p>';
             });
 
+            // Navigasi
             prevBtn.addEventListener('click', () => {
                 if (currentPage <= 1) return;
                 currentPage--;
@@ -79,6 +162,11 @@
                 if (currentPage >= totalPages) return;
                 currentPage++;
                 renderPage(currentPage);
+            });
+
+            // Render ulang saat ukuran layar berubah
+            window.addEventListener('resize', () => {
+                if (pdfDoc) renderPage(currentPage);
             });
         })();
     </script>
