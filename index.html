@@ -45,7 +45,6 @@
             overflow: hidden;
         }
 
-        /* ========== HEADER ========== */
         header {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, #0f7a44 100%);
             color: white;
@@ -125,7 +124,6 @@
             font-size: 1.5rem;
         }
 
-        /* ========== CONTAINER ========== */
         .container {
             display: flex;
             flex: 1;
@@ -133,7 +131,6 @@
             position: relative;
         }
 
-        /* ========== OVERLAY (MOBILE) ========== */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -149,7 +146,6 @@
             pointer-events: auto;
         }
 
-        /* ========== SIDEBAR ========== */
         .sidebar {
             width: var(--sidebar-width);
             max-width: 85vw;
@@ -168,34 +164,35 @@
 
         .sidebar-logo-area {
             display: none;
-            padding: 1.4rem 1.5rem 0.8rem;
+            padding: 1rem 1.5rem 0.6rem;
             align-items: center;
             gap: 0.7rem;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
         }
         .sidebar-logo-area i {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: var(--primary);
         }
         .sidebar-logo-area span {
             font-weight: 700;
             color: var(--primary-dark);
-            font-size: 1rem;
+            font-size: 0.95rem;
             letter-spacing: -0.2px;
         }
 
+        /* --- Kategori (padding dikurangi) --- */
         .category-title {
-            padding: 1.6rem 1.5rem 0.6rem;
-            font-size: 0.75rem;
+            padding: 0.9rem 1.5rem 0.3rem;
+            font-size: 0.7rem;
             color: var(--text-gray);
             text-transform: uppercase;
-            letter-spacing: 1.8px;
+            letter-spacing: 1.5px;
             font-weight: 700;
             user-select: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .category-title::after {
             content: '';
@@ -205,22 +202,23 @@
             border-radius: 1px;
         }
 
+        /* --- Menu item (padding & gap dikurangi) --- */
         .nav-item {
-            padding: 0.85rem 1.5rem;
+            padding: 0.5rem 1.5rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             border-left: 4px solid transparent;
             color: var(--text-dark);
             transition: all var(--transition);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             letter-spacing: -0.1px;
             position: relative;
-            margin: 2px 0;
+            margin: 1px 0;
             border-radius: 0 30px 30px 0;
-            margin-right: 12px;
+            margin-right: 10px;
         }
 
         .nav-item:hover {
@@ -240,18 +238,18 @@
             content: '';
             position: absolute;
             left: 0;
-            top: 8px;
-            bottom: 8px;
+            top: 5px;
+            bottom: 5px;
             width: 3px;
             background: var(--primary-light);
             border-radius: 0 4px 4px 0;
         }
 
         .nav-item i {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -270,7 +268,6 @@
             color: var(--accent);
         }
 
-        /* ========== MAIN CONTENT ========== */
         .main-content {
             flex: 1;
             position: relative;
@@ -280,72 +277,11 @@
             min-width: 0;
         }
 
-        /* Toolbar untuk zoom & fullscreen */
-        .viewer-toolbar {
-            display: none;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.5rem 1rem;
-            background: #f9fafb;
-            border-bottom: 1px solid #e2e8f0;
-            flex-shrink: 0;
-            flex-wrap: wrap;
-        }
-        .viewer-toolbar.visible {
-            display: flex;
-        }
-        .viewer-toolbar .zoom-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-gray);
-            margin-right: 0.5rem;
-            white-space: nowrap;
-        }
-        .toolbar-btn {
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            color: #334155;
-            width: 34px;
-            height: 34px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            padding: 0;
-        }
-        .toolbar-btn:hover {
-            background: #f0fdf4;
-            border-color: var(--primary-light);
-            color: var(--primary);
-        }
-        .toolbar-btn i {
-            pointer-events: none;
-        }
-        .zoom-percent {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            min-width: 50px;
-            text-align: center;
-            user-select: none;
-        }
-
-        /* Wrapper iframe dengan zoom */
-        .iframe-wrapper {
-            flex: 1;
-            overflow: auto;
-            background: #f1f5f9;
-            position: relative;
-        }
-        .iframe-wrapper iframe {
-            transform-origin: top left;
-            transition: transform 0.2s ease;
+        iframe {
             width: 100%;
             height: 100%;
             border: none;
+            background-color: #f1f5f9;
         }
 
         .placeholder {
@@ -388,7 +324,6 @@
             line-height: 1.5;
         }
 
-        /* ========== FOOTER ========== */
         footer {
             background: var(--primary-dark);
             text-align: center;
@@ -402,20 +337,26 @@
             text-overflow: ellipsis;
         }
 
-        /* ========== RESPONSIVE ========== */
+        /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
             :root {
                 --sidebar-width: 280px;
             }
             .nav-item {
-                padding: 0.75rem 1.2rem;
-                font-size: 0.85rem;
-                gap: 10px;
+                padding: 0.45rem 1.2rem;
+                font-size: 0.8rem;
+                gap: 8px;
+                margin-right: 8px;
+            }
+            .nav-item i {
+                width: 22px;
+                height: 22px;
+                font-size: 0.8rem;
             }
             .category-title {
-                padding: 1.2rem 1.2rem 0.5rem;
-                font-size: 0.7rem;
-                letter-spacing: 1.4px;
+                padding: 0.7rem 1.2rem 0.2rem;
+                font-size: 0.65rem;
+                letter-spacing: 1.2px;
             }
             header {
                 padding: 0.85rem 1.3rem;
@@ -459,7 +400,7 @@
                 display: flex;
             }
             .category-title:first-of-type {
-                padding-top: 0.6rem;
+                padding-top: 0.5rem;
             }
             header {
                 padding: 0.7rem 1rem;
@@ -501,15 +442,18 @@
                 border-radius: 0 var(--radius) var(--radius) 0;
             }
             .nav-item {
-                padding: 0.7rem 1rem;
-                font-size: 0.8rem;
-                gap: 8px;
+                padding: 0.4rem 1rem;
+                font-size: 0.75rem;
+                gap: 6px;
                 margin-right: 6px;
             }
             .nav-item i {
-                width: 22px;
-                height: 22px;
-                font-size: 0.85rem;
+                width: 20px;
+                height: 20px;
+                font-size: 0.75rem;
+            }
+            .category-title {
+                padding: 0.6rem 1rem 0.2rem;
             }
             header {
                 padding: 0.6rem 0.8rem;
@@ -555,24 +499,10 @@
         </aside>
 
         <main class="main-content">
-            <!-- Toolbar Zoom & Fullscreen -->
-            <div class="viewer-toolbar" id="viewerToolbar">
-                <span class="zoom-label"><i class="fa-solid fa-magnifying-glass"></i> Zoom</span>
-                <button class="toolbar-btn" id="zoomOutBtn" title="Perkecil"><i class="fa-solid fa-minus"></i></button>
-                <span class="zoom-percent" id="zoomPercent">100%</span>
-                <button class="toolbar-btn" id="zoomInBtn" title="Perbesar"><i class="fa-solid fa-plus"></i></button>
-                <button class="toolbar-btn" id="zoomResetBtn" title="Reset Zoom"><i class="fa-solid fa-rotate-right"></i></button>
-                <div style="flex:1;"></div>
-                <button class="toolbar-btn" id="fullscreenBtn" title="Fullscreen"><i class="fa-solid fa-expand"></i></button>
-            </div>
-
-            <!-- Wrapper iframe dengan dukungan zoom -->
-            <div class="iframe-wrapper" id="iframeWrapper">
-                <iframe id="documentViewer" src="about:blank" title="Penampil Dokumen"
-                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-fullscreen"
-                    loading="lazy">
-                </iframe>
-            </div>
+            <iframe id="documentViewer" src="about:blank" title="Penampil Dokumen"
+                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-fullscreen"
+                loading="lazy">
+            </iframe>
 
             <div class="placeholder" id="welcomeScreen">
                 <div class="icon-circle">
@@ -590,101 +520,40 @@
 
     <script>
         (function() {
-            // ========== DATA MENU (diperbarui dengan 9 item referensi) ==========
             const menuData = [{
                 category: "Materi Sosialisasi",
                 items: [
-                    { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard",
-                        url: "slide-presentasi.html" }
+                    { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard", url: "slide-presentasi.html" }
                 ]
             }, {
                 category: "Contoh Referensi",
                 items: [
-                    { title: "Analisis Kalender Pendidikan", icon: "fa-calendar-alt",
-                        url: "referensi/analisis-kaldik.pdf" },
-                    { title: "Capaian Pembelajaran", icon: "fa-bullseye",
-                        url: "referensi/capaian-pembelajaran.pdf" },
-                    { title: "Alur Tujuan Pembelajaran", icon: "fa-sitemap",
-                        url: "referensi/alur-tujuan-pembelajaran.pdf" },
-                    { title: "Program Tahunan", icon: "fa-calendar-check",
-                        url: "referensi/program-tahunan.pdf" },
-                    { title: "Program Semester", icon: "fa-calendar-week",
-                        url: "referensi/program-semester.pdf" },
-                    { title: "RPP / Modul Ajar", icon: "fa-chalkboard-teacher",
-                        url: "referensi/modul-ajar.pdf" },
-                    { title: "KKTP", icon: "fa-check-double",
-                        url: "referensi/kktp.pdf" },
-                    { title: "Program Keagamaan", icon: "fa-mosque",
-                        url: "referensi/program-keagamaan.pdf" },
-                    { title: "Program Ekstrakurikuler", icon: "fa-users",
-                        url: "referensi/program-ekstrakurikuler.pdf" },
-                    { title: "Program Perbaikan dan Pengayaan", icon: "fa-hands-helping",
-                        url: "referensi/program-perbaikan-pengayaan.pdf" }
+                    { title: "Analisis Kalender Pendidikan", icon: "fa-calendar-alt", url: "referensi/analisis-kaldik.pdf" },
+                    { title: "Capaian Pembelajaran", icon: "fa-bullseye", url: "referensi/capaian-pembelajaran.pdf" },
+                    { title: "Alur Tujuan Pembelajaran", icon: "fa-sitemap", url: "referensi/alur-tujuan-pembelajaran.pdf" },
+                    { title: "Program Tahunan", icon: "fa-calendar-check", url: "referensi/program-tahunan.pdf" },
+                    { title: "Program Semester", icon: "fa-calendar-week", url: "referensi/program-semester.pdf" },
+                    { title: "RPP / Modul Ajar", icon: "fa-chalkboard-teacher", url: "referensi/modul-ajar.pdf" },
+                    { title: "KKTP", icon: "fa-check-double", url: "referensi/kktp.pdf" },
+                    { title: "Program Keagamaan", icon: "fa-mosque", url: "referensi/program-keagamaan.pdf" },
+                    { title: "Program Ekstrakurikuler", icon: "fa-users", url: "referensi/program-ekstrakurikuler.pdf" },
+                    { title: "Program Perbaikan dan Pengayaan", icon: "fa-hands-helping", url: "referensi/program-perbaikan-pengayaan.pdf" }
                 ]
             }];
 
-            // DOM Elements
             const sidebarElement = document.getElementById('sidebarMenu');
             const viewerElement = document.getElementById('documentViewer');
-            const iframeWrapper = document.getElementById('iframeWrapper');
             const welcomeScreen = document.getElementById('welcomeScreen');
-            const viewerToolbar = document.getElementById('viewerToolbar');
             const menuToggle = document.getElementById('menuToggle');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
-            const zoomPercentSpan = document.getElementById('zoomPercent');
             let activeItemElement = null;
 
-            // Zoom state
-            let currentZoom = 1.0;
-            const ZOOM_STEP = 0.1;
-            const MIN_ZOOM = 0.4;
-            const MAX_ZOOM = 3.0;
-
-            function updateZoomTransform() {
-                viewerElement.style.transform = `scale(${currentZoom})`;
-                zoomPercentSpan.textContent = Math.round(currentZoom * 100) + '%';
-            }
-
-            function setZoom(newZoom) {
-                if (newZoom < MIN_ZOOM || newZoom > MAX_ZOOM) return;
-                currentZoom = newZoom;
-                updateZoomTransform();
-            }
-
-            function zoomIn() {
-                setZoom(currentZoom + ZOOM_STEP);
-            }
-
-            function zoomOut() {
-                setZoom(currentZoom - ZOOM_STEP);
-            }
-
-            function resetZoom() {
-                setZoom(1.0);
-            }
-
-            // Fullscreen
-            function enterFullscreen() {
-                const el = iframeWrapper;
-                if (el.requestFullscreen) {
-                    el.requestFullscreen();
-                } else if (el.webkitRequestFullscreen) {
-                    el.webkitRequestFullscreen();
-                } else if (el.msRequestFullscreen) {
-                    el.msRequestFullscreen();
-                }
-            }
-
-            // Tampilkan viewer dan toolbar
             function showViewer(url) {
                 welcomeScreen.style.display = 'none';
-                viewerToolbar.classList.add('visible');
-                iframeWrapper.style.display = 'block';
+                viewerElement.style.display = 'block';
                 viewerElement.src = url;
-                resetZoom();
             }
 
-            // Render sidebar
             function renderSidebar() {
                 const logoArea = sidebarElement.querySelector('.sidebar-logo-area');
                 sidebarElement.innerHTML = '';
@@ -730,20 +599,16 @@
                     });
                 });
 
-                viewerElement.style.display = 'block';
-                iframeWrapper.style.display = 'none';
-                viewerToolbar.classList.remove('visible');
+                viewerElement.style.display = 'none';
                 welcomeScreen.style.display = 'flex';
             }
 
-            // Sidebar mobile
             function openSidebar() {
                 sidebarElement.classList.add('open');
                 sidebarOverlay.classList.add('visible');
                 document.body.style.overflow = 'hidden';
                 setTimeout(() => {
-                    const focusTarget = sidebarElement.querySelector('.nav-item.active') ||
-                        sidebarElement.querySelector('.nav-item');
+                    const focusTarget = sidebarElement.querySelector('.nav-item.active') || sidebarElement.querySelector('.nav-item');
                     if (focusTarget) focusTarget.focus();
                 }, 150);
             }
@@ -763,45 +628,20 @@
                 }
             }
 
-            // Event listeners
             menuToggle.addEventListener('click', toggleSidebar);
             sidebarOverlay.addEventListener('click', closeSidebar);
-
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && sidebarElement.classList.contains('open')) {
                     closeSidebar();
                 }
             });
-
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 768 && sidebarElement.classList.contains('open')) {
                     closeSidebar();
                 }
             });
 
-            // Toolbar events
-            document.getElementById('zoomInBtn').addEventListener('click', zoomIn);
-            document.getElementById('zoomOutBtn').addEventListener('click', zoomOut);
-            document.getElementById('zoomResetBtn').addEventListener('click', resetZoom);
-            document.getElementById('fullscreenBtn').addEventListener('click', enterFullscreen);
-
-            // Keyboard zoom shortcuts (Ctrl + / Ctrl -)
-            window.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
-                    e.preventDefault();
-                    zoomIn();
-                } else if (e.ctrlKey && e.key === '-') {
-                    e.preventDefault();
-                    zoomOut();
-                } else if (e.ctrlKey && e.key === '0') {
-                    e.preventDefault();
-                    resetZoom();
-                }
-            });
-
-            // Init
             renderSidebar();
-            iframeWrapper.style.display = 'none';
         })();
     </script>
 </body>
