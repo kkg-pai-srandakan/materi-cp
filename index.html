@@ -45,6 +45,7 @@
             overflow: hidden;
         }
 
+        /* ========== HEADER ========== */
         header {
             background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, #0f7a44 100%);
             color: white;
@@ -124,6 +125,7 @@
             font-size: 1.5rem;
         }
 
+        /* ========== CONTAINER ========== */
         .container {
             display: flex;
             flex: 1;
@@ -131,6 +133,7 @@
             position: relative;
         }
 
+        /* ========== OVERLAY (MOBILE) ========== */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -146,6 +149,7 @@
             pointer-events: auto;
         }
 
+        /* ========== SIDEBAR ========== */
         .sidebar {
             width: var(--sidebar-width);
             max-width: 85vw;
@@ -181,7 +185,6 @@
             letter-spacing: -0.2px;
         }
 
-        /* --- Kategori (padding dikurangi) --- */
         .category-title {
             padding: 0.9rem 1.5rem 0.3rem;
             font-size: 0.7rem;
@@ -202,7 +205,6 @@
             border-radius: 1px;
         }
 
-        /* --- Menu item (padding & gap dikurangi) --- */
         .nav-item {
             padding: 0.5rem 1.5rem;
             cursor: pointer;
@@ -337,137 +339,53 @@
             text-overflow: ellipsis;
         }
 
-        /* --- RESPONSIVE --- */
+        /* RESPONSIVE */
         @media (max-width: 1024px) {
-            :root {
-                --sidebar-width: 280px;
-            }
-            .nav-item {
-                padding: 0.45rem 1.2rem;
-                font-size: 0.8rem;
-                gap: 8px;
-                margin-right: 8px;
-            }
-            .nav-item i {
-                width: 22px;
-                height: 22px;
-                font-size: 0.8rem;
-            }
-            .category-title {
-                padding: 0.7rem 1.2rem 0.2rem;
-                font-size: 0.65rem;
-                letter-spacing: 1.2px;
-            }
-            header {
-                padding: 0.85rem 1.3rem;
-            }
-            .header-text h1 {
-                font-size: 1.1rem;
-            }
-            .header-icon {
-                width: 40px;
-                height: 40px;
-            }
-            .header-icon i {
-                font-size: 1.3rem;
-            }
+            :root { --sidebar-width: 280px; }
+            .nav-item { padding: 0.45rem 1.2rem; font-size: 0.8rem; gap: 8px; margin-right: 8px; }
+            .nav-item i { width: 22px; height: 22px; font-size: 0.8rem; }
+            .category-title { padding: 0.7rem 1.2rem 0.2rem; font-size: 0.65rem; }
+            header { padding: 0.85rem 1.3rem; }
+            .header-text h1 { font-size: 1.1rem; }
+            .header-icon { width: 40px; height: 40px; }
+            .header-icon i { font-size: 1.3rem; }
         }
 
         @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-            .sidebar-overlay {
-                display: block;
-            }
+            .menu-toggle { display: block; }
+            .sidebar-overlay { display: block; }
             .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                width: 300px;
-                max-width: 82vw;
+                position: fixed; top: 0; left: 0; bottom: 0;
+                width: 300px; max-width: 82vw;
                 transform: translateX(-105%);
                 box-shadow: var(--shadow-xl);
                 border-right: 1px solid var(--border-color);
                 border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
                 z-index: 95;
             }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .sidebar-logo-area {
-                display: flex;
-            }
-            .category-title:first-of-type {
-                padding-top: 0.5rem;
-            }
-            header {
-                padding: 0.7rem 1rem;
-                gap: 0.6rem;
-            }
-            .header-text h1 {
-                font-size: 1rem;
-            }
-            .header-text .subtitle {
-                font-size: 0.7rem;
-            }
-            .header-icon {
-                width: 36px;
-                height: 36px;
-            }
-            .header-icon i {
-                font-size: 1.1rem;
-            }
-            .placeholder .icon-circle {
-                width: 75px;
-                height: 75px;
-            }
-            .placeholder .icon-circle i {
-                font-size: 2rem;
-            }
-            .placeholder h2 {
-                font-size: 1.1rem;
-            }
-            .placeholder p {
-                font-size: 0.8rem;
-                max-width: 260px;
-            }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-logo-area { display: flex; }
+            .category-title:first-of-type { padding-top: 0.5rem; }
+            header { padding: 0.7rem 1rem; gap: 0.6rem; }
+            .header-text h1 { font-size: 1rem; }
+            .header-text .subtitle { font-size: 0.7rem; }
+            .header-icon { width: 36px; height: 36px; }
+            .header-icon i { font-size: 1.1rem; }
+            .placeholder .icon-circle { width: 75px; height: 75px; }
+            .placeholder .icon-circle i { font-size: 2rem; }
+            .placeholder h2 { font-size: 1.1rem; }
+            .placeholder p { font-size: 0.8rem; max-width: 260px; }
         }
 
         @media (max-width: 400px) {
-            .sidebar {
-                width: 280px;
-                max-width: 88vw;
-                border-radius: 0 var(--radius) var(--radius) 0;
-            }
-            .nav-item {
-                padding: 0.4rem 1rem;
-                font-size: 0.75rem;
-                gap: 6px;
-                margin-right: 6px;
-            }
-            .nav-item i {
-                width: 20px;
-                height: 20px;
-                font-size: 0.75rem;
-            }
-            .category-title {
-                padding: 0.6rem 1rem 0.2rem;
-            }
-            header {
-                padding: 0.6rem 0.8rem;
-            }
-            .header-text h1 {
-                font-size: 0.9rem;
-            }
-            .header-text .subtitle {
-                font-size: 0.65rem;
-            }
-            footer {
-                font-size: 0.7rem;
-                padding: 0.6rem;
-            }
+            .sidebar { width: 280px; max-width: 88vw; border-radius: 0 var(--radius) var(--radius) 0; }
+            .nav-item { padding: 0.4rem 1rem; font-size: 0.75rem; gap: 6px; margin-right: 6px; }
+            .nav-item i { width: 20px; height: 20px; font-size: 0.75rem; }
+            .category-title { padding: 0.6rem 1rem 0.2rem; }
+            header { padding: 0.6rem 0.8rem; }
+            .header-text h1 { font-size: 0.9rem; }
+            .header-text .subtitle { font-size: 0.65rem; }
+            footer { font-size: 0.7rem; padding: 0.6rem; }
         }
     </style>
 </head>
@@ -520,10 +438,12 @@
 
     <script>
         (function() {
+            // ========== DATA MENU (ditambah item baru) ==========
             const menuData = [{
                 category: "Materi Sosialisasi",
                 items: [
-                    { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard", url: "slide-presentasi.html" }
+                    { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard", url: "slide-presentasi.html" },
+                    { title: "Analisis Kebijakan CP BKPDM 020 Tahun 2026", icon: "fa-scale-balanced", url: "analisis-kebijakan-cp.html" }
                 ]
             }, {
                 category: "Contoh Referensi",
@@ -541,6 +461,7 @@
                 ]
             }];
 
+            // DOM Elements
             const sidebarElement = document.getElementById('sidebarMenu');
             const viewerElement = document.getElementById('documentViewer');
             const welcomeScreen = document.getElementById('welcomeScreen');
