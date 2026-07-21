@@ -566,30 +566,36 @@
                 }
             }
 
-            async function showViewer(item) {
-                welcomeScreen.style.display = 'none';
-                viewerElement.style.display = 'none';
-                viewerError.classList.remove('visible');
-                contentToolbar.classList.remove('visible');
-                currentUrl = '';
+async function showViewer(item) {
+    welcomeScreen.style.display = 'none';
+    viewerElement.style.display = 'none';
+    viewerError.classList.remove('visible');
+    contentToolbar.classList.remove('visible');
+    currentUrl = '';
 
-                toolbarTitleText.textContent = item.title;
-                toolbarIcon.className = 'fa-solid ' + (item.type === 'pdf' ? 'fa-file-pdf' : 'fa-person-chalkboard');
+    toolbarTitleText.textContent = item.title;
+    toolbarIcon.className = 'fa-solid ' + (item.type === 'pdf' ? 'fa-file-pdf' : 'fa-person-chalkboard');
 
-                const exists = await checkFileExists(item.url);
-                if (!exists) {
-                    viewerError.querySelector('.msg-text').textContent = 'File tidak ditemukan: ' + item.url;
-                    viewerError.classList.add('visible');
-                    contentToolbar.classList.add('visible');
-                    currentUrl = '';
-                    return;
-                }
+    // Jika PDF, gunakan viewer khusus
+    let finalUrl = item.url;
+    if (item.type === 'pdf') {
+        finalUrl = 'pdf-viewer.html?file=' + encodeURIComponent(item.url);
+    }
 
-                currentUrl = item.url;
-                contentToolbar.classList.add('visible');
-                viewerElement.src = item.url;
-                viewerElement.style.display = 'block';
-            }
+    const exists = await checkFileExists(item.url);
+    if (!exists) {
+        viewerError.querySelector('.msg-text').textContent = 'File tidak ditemukan: ' + item.url;
+        viewerError.classList.add('visible');
+        contentToolbar.classList.add('visible');
+        currentUrl = '';
+        return;
+    }
+
+    currentUrl = finalUrl;
+    contentToolbar.classList.add('visible');
+    viewerElement.src = finalUrl;
+    viewerElement.style.display = 'block';
+}
 
             function renderSidebar() {
                 const logoArea = sidebarElement.querySelector('.sidebar-logo-area');
