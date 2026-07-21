@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Presentasi · Penyusunan Perangkat PAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d6b3d;
+            --primary-dark: #064e28;
+            --primary-light: #10b981;
+            --accent: #059669;
+            --bg-light: #f0fdf4;
+            --bg-card: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #475569;
+            --text-muted: #64748b;
+            --border: #dcfce7;
+            --shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+            --radius: 22px;
+            --radius-sm: 12px;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, 'Inter', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(145deg, #f0fdf4 0%, #e6f7ec 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            overflow: hidden;
+        }
+
+        /* Slider utama */
+        .slider {
+            width: 100%;
+            max-width: 950px;
+            height: 100%;
+            max-height: 850px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .slides-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            background: #fff;
+            transition: height 0.35s ease;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            padding: 2.2rem 2.2rem 2rem;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+            transform: translateY(10px);
+            background: #ffffff;
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        /* Sampul (cover) */
+        .cover {
+            background: linear-gradient(135deg, #064e28 0%, #0d6b3d 60%, #0f7a44 100%);
+            color: white;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+        }
+        .cover .cover-icon {
+            font-size: 3.6rem;
+            margin-bottom: 1.2rem;
+            color: #a7f3d0;
+        }
+        .cover h2 {
+            font-size: 2.1rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: white;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+        .cover .subtitle {
+            font-size: 1.05rem;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 1.4rem;
+        }
+        .cover .date-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .cover .date-display i {
+            font-size: 0.9rem;
+        }
+
+        /* Step number dengan ikon */
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #e6f7ec;
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 0.35rem 1.2rem;
+            border-radius: 30px;
+            letter-spacing: 0.4px;
+            margin-bottom: 0.8rem;
+            border: 1px solid #a7f3d0;
+            width: fit-content;
+        }
+        .step-number i {
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0.5rem 0 1.2rem;
+            line-height: 1.3;
+            letter-spacing: -0.3px;
+        }
+
+        p,
+        li {
+            color: var(--text-gray);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 0.6rem;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            list-style-type: none;
+        }
+        ul li::before {
+            content: "●";
+            color: var(--primary-light);
+            font-weight: bold;
+            display: inline-block;
+            width: 1.3em;
+            margin-left: -1.3em;
+            font-size: 0.7rem;
+            vertical-align: middle;
+        }
+
+        .btn-lihat {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #e6f7ec;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            text-decoration: none;
+            border: 1px solid #a7f3d0;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-left: 0.3rem;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+        .btn-lihat i {
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+        .btn-lihat:hover {
+            background: #d1fae5;
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
+        }
+
+        .divider {
+            margin: 1.2rem 0 0.5rem;
+            border-top: 1px dashed #cbd5e1;
+        }
+
+        /* Navigasi panah */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border);
+            color: var(--primary-dark);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s;
+            backdrop-filter: blur(6px);
+        }
+        .nav-arrow:hover {
+            background: white;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+            color: var(--primary);
+        }
+        .nav-arrow.prev {
+            left: 12px;
+        }
+        .nav-arrow.next {
+            right: 12px;
+        }
+        .nav-arrow:active {
+            transform: translateY(-50%) scale(0.94);
+        }
+
+        /* Dots */
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 0.8rem 1rem 1.2rem;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+        }
+        .dot.active {
+            background: var(--primary);
+            width: 14px;
+            height: 14px;
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px rgba(13, 107, 61, 0.2);
+        }
+
+        /* POPUP MODAL PDF */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            height: 85vh;
+            border-radius: var(--radius);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #f9fafb;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .modal-header h3 {
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-btn:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .modal-body {
+            flex: 1;
+            background: #f1f5f9;
+        }
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            body {
+                padding: 0.4rem;
+            }
+            .slide {
+                padding: 1.6rem 1rem;
+            }
+            .cover h2 {
+                font-size: 1.7rem;
+            }
+            .cover .subtitle {
+                font-size: 0.9rem;
+            }
+            .nav-arrow {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            .step-number {
+                font-size: 0.75rem;
+                padding: 0.3rem 1rem;
+            }
+            h2 {
+                font-size: 1.35rem;
+            }
+            p,
+            li {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .slider {
+                max-height: 100%;
+            }
+            .cover .cover-icon {
+                font-size: 2.6rem;
+            }
+            .cover h2 {
+                font-size: 1.4rem;
+            }
+            .cover .date-display {
+                font-size: 0.8rem;
+                padding: 0.5rem 1.2rem;
+            }
+            .nav-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider" id="slider">
+        <div class="slides-container" id="slidesContainer">
+            <!-- Slide 0: Sampul -->
+            <div class="slide cover active">
+                <div class="cover-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+                <h2>Penyusunan Perangkat Pembelajaran</h2>
+                <div class="subtitle">Pendidikan Agama Islam · Kurikulum Merdeka</div>
+                <p style="color:rgba(255,255,255,0.85); margin-bottom:1.6rem;">KKG PAI Kapanewon Srandakan</p>
+                <div class="date-display" id="dateDisplay">
+                    <i class="fa-regular fa-calendar"></i> <span id="dateText"></span>
+                </div>
+            </div>
+
+            <!-- Slide 1: Analisis Kaldik -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-calendar-alt"></i> Langkah 1</span>
+                <h2>Analisis Kalender Pendidikan (Kaldik)</h2>
+                <ul>
+                    <li>Unduh kalender pendidikan resmi dari Dinas Pendidikan, Kepemudaan, dan Olahraga Kabupaten Bantul
+                        <span class="btn-lihat" onclick="openPdf('referensi/kaldik-bantul.pdf','Kalender Pendidikan Bantul')"><i class="fa-solid fa-file-pdf"></i> Lihat</span>
+                    </li>
+                    <li>Tentukan <strong>minggu efektif</strong> dengan mengeluarkan hari libur nasional, libur semester, dan kegiatan khusus.</li>
+                    <li>Hitung <strong>jumlah jam pelajaran (JP) efektif</strong> per semester sesuai struktur kurikulum.</li>
+                    <li>Hasil analisis menjadi dasar Prota dan Promes.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 2: CP -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-bullseye"></i> Langkah 2</span>
+                <h2>Pahami Capaian Pembelajaran (CP)</h2>
+                <ul>
+                    <li>CP PAI dan Budi Pekerti mengacu pada Keputusan Kepala BKPDM Nomor 020 Tahun 2026.
+                        <span class="btn-lihat" onclick="openPdf('referensi/sk-bkpdm-020-2026.pdf','SK BKPDM 020/2026')"><i class="fa-solid fa-file-pdf"></i> Lihat</span>
+                    </li>
+                    <li>Identifikasi elemen CP: Al-Qur’an Hadis, Akidah, Akhlak, Fikih, Sejarah Peradaban Islam.</li>
+                    <li>Pahami kompetensi akhir fase sebagai target jangka panjang.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 3: ATP -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-sitemap"></i> Langkah 3</span>
+                <h2>Susun Alur Tujuan Pembelajaran (ATP)</h2>
+                <ul>
+                    <li>Turunkan CP menjadi <strong>Tujuan Pembelajaran (TP)</strong> yang operasional dan terukur.</li>
+                    <li>ATP disusun berdasarkan SK Kakanwil Kemenag DIY Nomor 522 Tahun 2026.
+                        <span class="btn-lihat" onclick="openPdf('referensi/sk-kakanwil-522-2026.pdf','SK Kakanwil 522/2026')"><i class="fa-solid fa-file-pdf"></i> Lihat</span>
+                    </li>
+                    <li>Urutkan TP secara logis (mudah ke sulit, tematik) untuk satu tahun/semester.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 4: Prota -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-calendar-check"></i> Langkah 4</span>
+                <h2>Buat Program Tahunan (Prota)</h2>
+                <ul>
+                    <li>Alokasikan semua TP ke semester dan minggu efektif.</li>
+                    <li>Prota berisi: mata pelajaran, fase, kelas, tahun ajaran, CP, distribusi alokasi waktu.</li>
+                    <li>Beban PAI: <strong>Intrakurikuler 3 JP</strong> dan <strong>Kokurikuler 1 JP</strong> (disesuaikan kebijakan sekolah).</li>
+                </ul>
+            </div>
+
+            <!-- Slide 5: Promes -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-calendar-week"></i> Langkah 5</span>
+                <h2>Buat Program Semester (Promes)</h2>
+                <ul>
+                    <li>Jabarkan Prota ke dalam bulan dan minggu secara rinci.</li>
+                    <li>Tetapkan tema/topik mingguan sesuai ATP.</li>
+                    <li>Cantumkan rencana waktu setiap pertemuan dan jenis asesmen.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 6: Perencanaan Pembelajaran -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-chalkboard-teacher"></i> Langkah 6</span>
+                <h2>Susun Perencanaan Pembelajaran (Modul Ajar/RPP)</h2>
+                <p>Rancang modul ajar berbasis pengalaman, kontekstual, berdiferensiasi, dan berpusat pada siswa.</p>
+                <ul>
+                    <li><strong>Identifikasi:</strong> kesiapan/minat siswa, karakteristik materi, profil lulusan (DPL, Lima Cinta).</li>
+                    <li><strong>Desain:</strong> tujuan pembelajaran operasional, praktik pedagogis aktif (PBL, inkuiri), lingkungan belajar aman.</li>
+                    <li><strong>Pengalaman Belajar:</strong> mindful, meaningful, joyful; alur pembuka-inti-penutup; refleksi siswa.</li>
+                    <li><strong>Asesmen:</strong> awal (diagnostik), proses (umpan balik), akhir (capaian & tindak lanjut).</li>
+                </ul>
+            </div>
+
+            <!-- Slide 7: KKTP -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-check-double"></i> Langkah 7</span>
+                <h2>Susun Kriteria Kelulusan Tujuan Pembelajaran (KKTP)</h2>
+                <ul>
+                    <li>Tentukan batas minimal penguasaan TP sebagai acuan ketuntasan.</li>
+                    <li>KKTP digunakan untuk menentukan remedial atau pengayaan.</li>
+                    <li>Sesuaikan dengan kompleksitas materi dan karakteristik peserta didik.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 8: Program Pendukung -->
+            <div class="slide">
+                <span class="step-number"><i class="fa-solid fa-hands-helping"></i> Langkah 8</span>
+                <h2>Susun Program Pendukung</h2>
+                <ul>
+                    <li><strong>Asesmen Awal:</strong> instrumen diagnostik kognitif & non-kognitif.</li>
+                    <li><strong>Perbaikan & Pengayaan:</strong> kegiatan remedial/pengayaan sesuai KKTP.</li>
+                    <li><strong>Ekstrakurikuler:</strong> mentoring, tilawah, kaligrafi, dll.</li>
+                    <li><strong>Program Keagamaan:</strong> pembiasaan ibadah, PHBI, pesantren kilat.</li>
+                </ul>
+                <div class="divider"></div>
+                <p style="text-align:right; font-weight:600; color:var(--primary); margin-top:0.6rem;">
+                    <i class="fa-solid fa-check-circle"></i> Perangkat siap diimplementasikan.
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigasi panah -->
+        <button class="nav-arrow prev" id="prevBtn" aria-label="Slide sebelumnya"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="nav-arrow next" id="nextBtn" aria-label="Slide berikutnya"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <!-- Dots -->
+        <div class="dots-container" id="dotsContainer"></div>
+    </div>
+
+    <!-- Modal PDF -->
+    <div class="modal-overlay" id="pdfModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-pdf"></i> <span id="pdfTitle">Dokumen Referensi</span></h3>
+                <button class="close-btn" onclick="closePdf()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfFrame" src="" title="Penampil PDF"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Tampilkan tanggal hari ini
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = today.toLocaleDateString('id-ID', options);
+            document.getElementById('dateText').textContent = dateString;
+
+            const slides = document.querySelectorAll('.slide');
+            const container = document.getElementById('slidesContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('dotsContainer');
+            const slider = document.getElementById('slider');
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+
+            // Buat dots
+            function createDots() {
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'dot' + (i === currentIndex ? ' active' : '');
+                    dot.setAttribute('aria-label', `Slide ${i+1}`);
+                    dot.addEventListener('click', () => goToSlide(i));
+                    dotsContainer.appendChild(dot);
+                }
+            }
+
+            function updateDots() {
+                const dots = document.querySelectorAll('.dot');
+                dots.forEach((d, idx) => d.classList.toggle('active', idx === currentIndex));
+            }
+
+            function setContainerHeight() {
+                const activeSlide = slides[currentIndex];
+                if (activeSlide) {
+                    container.style.height = activeSlide.offsetHeight + 'px';
+                }
+            }
+
+            function goToSlide(index) {
+                if (index < 0 || index >= totalSlides) return;
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                currentIndex = index;
+                updateDots();
+                setContainerHeight();
+            }
+
+            function nextSlide() {
+                goToSlide((currentIndex + 1) % totalSlides);
+            }
+
+            function prevSlide() {
+                goToSlide((currentIndex - 1 + totalSlides) % totalSlides);
+            }
+
+            // Event listeners tombol
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevSlide();
+                }
+            });
+
+            // Swipe / geser navigasi
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const swipeThreshold = 50;
+
+            slider.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            slider.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            }
+
+            // Inisialisasi
+            createDots();
+            goToSlide(0);
+            setContainerHeight();
+
+            // Recalculate height on resize
+            window.addEventListener('resize', setContainerHeight);
+        })();
+
+        // Fungsi popup PDF (global)
+        function openPdf(url, title) {
+            const modal = document.getElementById('pdfModal');
+            const frame = document.getElementById('pdfFrame');
+            const titleSpan = document.getElementById('pdfTitle');
+            if (modal && frame && titleSpan) {
+                frame.src = url;
+                titleSpan.textContent = title || 'Dokumen Referensi';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePdf() {
+            const modal = document.getElementById('pdfModal');
+            const frame = document.getElementById('pdfFrame');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            if (frame) frame.src = '';
+        }
+
+        document.getElementById('pdfModal').addEventListener('click', function(e) {
+            if (e.target === this) closePdf();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePdf();
+        });
+    </script>
+</body>
+</html>
