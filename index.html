@@ -17,10 +17,10 @@
             --text-gray: #64748b;
             --text-light: #94a3b8;
             --border-color: #dcfce7;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
-            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.12);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.12);
             --radius-sm: 8px;
             --radius: 14px;
             --radius-lg: 20px;
@@ -81,10 +81,10 @@
             line-height: 1;
         }
         .menu-toggle:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255,255,255,0.15);
         }
         .menu-toggle:active {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255,255,255,0.25);
         }
 
         .header-text {
@@ -110,7 +110,7 @@
         }
 
         .header-icon {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255,255,255,0.12);
             width: 48px;
             height: 48px;
             border-radius: 50%;
@@ -138,7 +138,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0,0,0,0.45);
             z-index: 90;
             transition: opacity var(--transition);
             opacity: 0;
@@ -280,11 +280,72 @@
             min-width: 0;
         }
 
-        iframe {
+        /* Toolbar untuk zoom & fullscreen */
+        .viewer-toolbar {
+            display: none;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem 1rem;
+            background: #f9fafb;
+            border-bottom: 1px solid #e2e8f0;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .viewer-toolbar.visible {
+            display: flex;
+        }
+        .viewer-toolbar .zoom-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-gray);
+            margin-right: 0.5rem;
+            white-space: nowrap;
+        }
+        .toolbar-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            color: #334155;
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            padding: 0;
+        }
+        .toolbar-btn:hover {
+            background: #f0fdf4;
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+        .toolbar-btn i {
+            pointer-events: none;
+        }
+        .zoom-percent {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            min-width: 50px;
+            text-align: center;
+            user-select: none;
+        }
+
+        /* Wrapper iframe dengan zoom */
+        .iframe-wrapper {
+            flex: 1;
+            overflow: auto;
+            background: #f1f5f9;
+            position: relative;
+        }
+        .iframe-wrapper iframe {
+            transform-origin: top left;
+            transition: transform 0.2s ease;
             width: 100%;
             height: 100%;
             border: none;
-            background-color: #f1f5f9;
         }
 
         .placeholder {
@@ -333,7 +394,7 @@
             text-align: center;
             padding: 0.8rem 1rem;
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.75);
+            color: rgba(255,255,255,0.75);
             font-weight: 500;
             letter-spacing: 0.2px;
             white-space: nowrap;
@@ -342,8 +403,6 @@
         }
 
         /* ========== RESPONSIVE ========== */
-
-        /* Tablet */
         @media (max-width: 1024px) {
             :root {
                 --sidebar-width: 280px;
@@ -373,7 +432,6 @@
             }
         }
 
-        /* Mobile: sidebar jadi overlay */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -436,7 +494,6 @@
             }
         }
 
-        /* Mobile kecil */
         @media (max-width: 400px) {
             .sidebar {
                 width: 280px;
@@ -472,7 +529,6 @@
 </head>
 <body>
 
-    <!-- ==================== HEADER ==================== -->
     <header>
         <div class="header-left">
             <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" title="Menu">
@@ -488,193 +544,265 @@
         </div>
     </header>
 
-    <!-- ==================== OVERLAY MOBILE ==================== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ==================== CONTAINER UTAMA ==================== -->
     <div class="container">
-        <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebarMenu">
             <div class="sidebar-logo-area">
                 <i class="fa-solid fa-book-open-reader"></i>
                 <span>Menu Navigasi</span>
             </div>
-            <!-- Menu di-render oleh JavaScript -->
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="main-content">
-            <iframe
-            id="documentViewer"
-            src="about:blank"
-            title="Penampil Dokumen"
-            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation"
-            loading="lazy"
-        ></iframe>
-
-        <div class="placeholder" id="welcomeScreen">
-            <div class="icon-circle">
-                <i class="fa-solid fa-folder-open"></i>
+            <!-- Toolbar Zoom & Fullscreen -->
+            <div class="viewer-toolbar" id="viewerToolbar">
+                <span class="zoom-label"><i class="fa-solid fa-magnifying-glass"></i> Zoom</span>
+                <button class="toolbar-btn" id="zoomOutBtn" title="Perkecil"><i class="fa-solid fa-minus"></i></button>
+                <span class="zoom-percent" id="zoomPercent">100%</span>
+                <button class="toolbar-btn" id="zoomInBtn" title="Perbesar"><i class="fa-solid fa-plus"></i></button>
+                <button class="toolbar-btn" id="zoomResetBtn" title="Reset Zoom"><i class="fa-solid fa-rotate-right"></i></button>
+                <div style="flex:1;"></div>
+                <button class="toolbar-btn" id="fullscreenBtn" title="Fullscreen"><i class="fa-solid fa-expand"></i></button>
             </div>
-            <h2>Pilih Materi di Sidebar</h2>
-            <p>Materi presentasi atau dokumen referensi PDF akan ditampilkan di area ini.</p>
-        </div>
-    </main>
-</div>
 
-<!-- ==================== FOOTER ==================== -->
-<footer>
-    Disusun oleh: Ardika Riski Rahmawan &bull; KKG PAI Kapanewon Srandakan
-</footer>
+            <!-- Wrapper iframe dengan dukungan zoom -->
+            <div class="iframe-wrapper" id="iframeWrapper">
+                <iframe id="documentViewer" src="about:blank" title="Penampil Dokumen"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-fullscreen"
+                    loading="lazy">
+                </iframe>
+            </div>
 
-<!-- ==================== SCRIPT ==================== -->
-<script>
-    (function() {
-        // ========== DATA MENU ==========
-        // Sesuaikan nama file (url) dengan file yang Anda unggah ke repositori GitHub
-        const menuData = [{
-            category: "Materi Sosialisasi",
-            items: [
-                { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard",
-                    url: "slide-presentasi.html" }
-            ]
-        }, {
-            category: "Contoh Referensi",
-            items: [
-                { title: "Analisis Kaldik", icon: "fa-file-pdf",
-                    url: "referensi/analisis-kaldik.pdf" },
-                { title: "Capaian Pembelajaran", icon: "fa-file-pdf",
-                    url: "referensi/capaian-pembelajaran.pdf" },
-                { title: "Alur Tujuan Pembelajaran", icon: "fa-file-pdf",
-                    url: "referensi/alur-tujuan-pembelajaran.pdf" },
-                { title: "Prota & Promes", icon: "fa-file-pdf", url: "referensi/prota-promes.pdf" },
-                { title: "Modul Ajar PAI", icon: "fa-file-pdf", url: "referensi/modul-ajar.pdf" }
-            ]
-        }];
+            <div class="placeholder" id="welcomeScreen">
+                <div class="icon-circle">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <h2>Pilih Materi di Sidebar</h2>
+                <p>Materi presentasi atau dokumen referensi PDF akan ditampilkan di area ini.</p>
+            </div>
+        </main>
+    </div>
 
-        // ========== DOM ELEMENTS ==========
-        const sidebarElement = document.getElementById('sidebarMenu');
-        const viewerElement = document.getElementById('documentViewer');
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        let activeItemElement = null;
+    <footer>
+        Disusun oleh: Ardika Riski Rahmawan &bull; KKG PAI Kapanewon Srandakan
+    </footer>
 
-        // ========== FUNGSI RENDER SIDEBAR ==========
-        function renderSidebar() {
-            // Bersihkan dulu (jika ada render ulang), tapi sisakan sidebar-logo-area jika ada
-            const logoArea = sidebarElement.querySelector('.sidebar-logo-area');
-            sidebarElement.innerHTML = '';
-            if (logoArea) {
-                sidebarElement.appendChild(logoArea);
-            } else {
-                // fallback: buat ulang logo area untuk mobile
-                const newLogoArea = document.createElement('div');
-                newLogoArea.className = 'sidebar-logo-area';
-                newLogoArea.innerHTML =
-                    '<i class="fa-solid fa-book-open-reader"></i><span>Menu Navigasi</span>';
-                sidebarElement.appendChild(newLogoArea);
+    <script>
+        (function() {
+            // ========== DATA MENU (diperbarui dengan 9 item referensi) ==========
+            const menuData = [{
+                category: "Materi Sosialisasi",
+                items: [
+                    { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard",
+                        url: "slide-presentasi.html" }
+                ]
+            }, {
+                category: "Contoh Referensi",
+                items: [
+                    { title: "Analisis Kalender Pendidikan", icon: "fa-calendar-alt",
+                        url: "referensi/analisis-kaldik.pdf" },
+                    { title: "Capaian Pembelajaran", icon: "fa-bullseye",
+                        url: "referensi/capaian-pembelajaran.pdf" },
+                    { title: "Alur Tujuan Pembelajaran", icon: "fa-sitemap",
+                        url: "referensi/alur-tujuan-pembelajaran.pdf" },
+                    { title: "Program Tahunan", icon: "fa-calendar-check",
+                        url: "referensi/program-tahunan.pdf" },
+                    { title: "Program Semester", icon: "fa-calendar-week",
+                        url: "referensi/program-semester.pdf" },
+                    { title: "RPP / Modul Ajar", icon: "fa-chalkboard-teacher",
+                        url: "referensi/modul-ajar.pdf" },
+                    { title: "KKTP", icon: "fa-check-double",
+                        url: "referensi/kktp.pdf" },
+                    { title: "Program Keagamaan", icon: "fa-mosque",
+                        url: "referensi/program-keagamaan.pdf" },
+                    { title: "Program Ekstrakurikuler", icon: "fa-users",
+                        url: "referensi/program-ekstrakurikuler.pdf" },
+                    { title: "Program Perbaikan dan Pengayaan", icon: "fa-hands-helping",
+                        url: "referensi/program-perbaikan-pengayaan.pdf" }
+                ]
+            }];
+
+            // DOM Elements
+            const sidebarElement = document.getElementById('sidebarMenu');
+            const viewerElement = document.getElementById('documentViewer');
+            const iframeWrapper = document.getElementById('iframeWrapper');
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const viewerToolbar = document.getElementById('viewerToolbar');
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const zoomPercentSpan = document.getElementById('zoomPercent');
+            let activeItemElement = null;
+
+            // Zoom state
+            let currentZoom = 1.0;
+            const ZOOM_STEP = 0.1;
+            const MIN_ZOOM = 0.4;
+            const MAX_ZOOM = 3.0;
+
+            function updateZoomTransform() {
+                viewerElement.style.transform = `scale(${currentZoom})`;
+                zoomPercentSpan.textContent = Math.round(currentZoom * 100) + '%';
             }
 
-            menuData.forEach((section) => {
-                const categoryTitle = document.createElement('div');
-                categoryTitle.className = 'category-title';
-                categoryTitle.textContent = section.category;
-                sidebarElement.appendChild(categoryTitle);
+            function setZoom(newZoom) {
+                if (newZoom < MIN_ZOOM || newZoom > MAX_ZOOM) return;
+                currentZoom = newZoom;
+                updateZoomTransform();
+            }
 
-                section.items.forEach((item) => {
-                    const menuItem = document.createElement('div');
-                    menuItem.className = 'nav-item';
-                    menuItem.innerHTML =
-                        `<i class="fa-solid ${item.icon}"></i> <span>${item.title}</span>`;
-                    menuItem.setAttribute('role', 'button');
-                    menuItem.setAttribute('tabindex', '0');
-                    menuItem.setAttribute('aria-label', `Buka ${item.title}`);
+            function zoomIn() {
+                setZoom(currentZoom + ZOOM_STEP);
+            }
 
-                    menuItem.addEventListener('click', () => {
-                        // Update active state
-                        if (activeItemElement) {
-                            activeItemElement.classList.remove('active');
-                        }
-                        menuItem.classList.add('active');
-                        activeItemElement = menuItem;
+            function zoomOut() {
+                setZoom(currentZoom - ZOOM_STEP);
+            }
 
-                        // Tampilkan viewer
-                        welcomeScreen.style.display = 'none';
-                        viewerElement.style.display = 'block';
-                        viewerElement.src = item.url;
+            function resetZoom() {
+                setZoom(1.0);
+            }
 
-                        // Tutup sidebar di mobile setelah memilih
-                        closeSidebar();
+            // Fullscreen
+            function enterFullscreen() {
+                const el = iframeWrapper;
+                if (el.requestFullscreen) {
+                    el.requestFullscreen();
+                } else if (el.webkitRequestFullscreen) {
+                    el.webkitRequestFullscreen();
+                } else if (el.msRequestFullscreen) {
+                    el.msRequestFullscreen();
+                }
+            }
+
+            // Tampilkan viewer dan toolbar
+            function showViewer(url) {
+                welcomeScreen.style.display = 'none';
+                viewerToolbar.classList.add('visible');
+                iframeWrapper.style.display = 'block';
+                viewerElement.src = url;
+                resetZoom();
+            }
+
+            // Render sidebar
+            function renderSidebar() {
+                const logoArea = sidebarElement.querySelector('.sidebar-logo-area');
+                sidebarElement.innerHTML = '';
+                if (logoArea) {
+                    sidebarElement.appendChild(logoArea);
+                } else {
+                    const newLogoArea = document.createElement('div');
+                    newLogoArea.className = 'sidebar-logo-area';
+                    newLogoArea.innerHTML = '<i class="fa-solid fa-book-open-reader"></i><span>Menu Navigasi</span>';
+                    sidebarElement.appendChild(newLogoArea);
+                }
+
+                menuData.forEach((section) => {
+                    const categoryTitle = document.createElement('div');
+                    categoryTitle.className = 'category-title';
+                    categoryTitle.textContent = section.category;
+                    sidebarElement.appendChild(categoryTitle);
+
+                    section.items.forEach((item) => {
+                        const menuItem = document.createElement('div');
+                        menuItem.className = 'nav-item';
+                        menuItem.innerHTML = `<i class="fa-solid ${item.icon}"></i> <span>${item.title}</span>`;
+                        menuItem.setAttribute('role', 'button');
+                        menuItem.setAttribute('tabindex', '0');
+                        menuItem.setAttribute('aria-label', `Buka ${item.title}`);
+
+                        menuItem.addEventListener('click', () => {
+                            if (activeItemElement) activeItemElement.classList.remove('active');
+                            menuItem.classList.add('active');
+                            activeItemElement = menuItem;
+                            showViewer(item.url);
+                            closeSidebar();
+                        });
+
+                        menuItem.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                menuItem.click();
+                            }
+                        });
+
+                        sidebarElement.appendChild(menuItem);
                     });
-
-                    // Keyboard support
-                    menuItem.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            menuItem.click();
-                        }
-                    });
-
-                    sidebarElement.appendChild(menuItem);
                 });
+
+                viewerElement.style.display = 'block';
+                iframeWrapper.style.display = 'none';
+                viewerToolbar.classList.remove('visible');
+                welcomeScreen.style.display = 'flex';
+            }
+
+            // Sidebar mobile
+            function openSidebar() {
+                sidebarElement.classList.add('open');
+                sidebarOverlay.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => {
+                    const focusTarget = sidebarElement.querySelector('.nav-item.active') ||
+                        sidebarElement.querySelector('.nav-item');
+                    if (focusTarget) focusTarget.focus();
+                }, 150);
+            }
+
+            function closeSidebar() {
+                sidebarElement.classList.remove('open');
+                sidebarOverlay.classList.remove('visible');
+                document.body.style.overflow = '';
+                if (menuToggle) menuToggle.focus();
+            }
+
+            function toggleSidebar() {
+                if (sidebarElement.classList.contains('open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            }
+
+            // Event listeners
+            menuToggle.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && sidebarElement.classList.contains('open')) {
+                    closeSidebar();
+                }
             });
 
-            viewerElement.style.display = 'none';
-        }
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && sidebarElement.classList.contains('open')) {
+                    closeSidebar();
+                }
+            });
 
-        // ========== FUNGSI SIDEBAR MOBILE ==========
-        function openSidebar() {
-            sidebarElement.classList.add('open');
-            sidebarOverlay.classList.add('visible');
-            document.body.style.overflow = 'hidden';
-            // Fokus ke item pertama atau active item
-            setTimeout(() => {
-                const focusTarget = sidebarElement.querySelector('.nav-item.active') ||
-                    sidebarElement.querySelector('.nav-item');
-                if (focusTarget) focusTarget.focus();
-            }, 150);
-        }
+            // Toolbar events
+            document.getElementById('zoomInBtn').addEventListener('click', zoomIn);
+            document.getElementById('zoomOutBtn').addEventListener('click', zoomOut);
+            document.getElementById('zoomResetBtn').addEventListener('click', resetZoom);
+            document.getElementById('fullscreenBtn').addEventListener('click', enterFullscreen);
 
-        function closeSidebar() {
-            sidebarElement.classList.remove('open');
-            sidebarOverlay.classList.remove('visible');
-            document.body.style.overflow = '';
-            // Kembalikan fokus ke tombol toggle
-            if (menuToggle) menuToggle.focus();
-        }
+            // Keyboard zoom shortcuts (Ctrl + / Ctrl -)
+            window.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
+                    e.preventDefault();
+                    zoomIn();
+                } else if (e.ctrlKey && e.key === '-') {
+                    e.preventDefault();
+                    zoomOut();
+                } else if (e.ctrlKey && e.key === '0') {
+                    e.preventDefault();
+                    resetZoom();
+                }
+            });
 
-        function toggleSidebar() {
-            if (sidebarElement.classList.contains('open')) {
-                closeSidebar();
-            } else {
-                openSidebar();
-            }
-        }
-
-        // ========== EVENT LISTENERS ==========
-        menuToggle.addEventListener('click', toggleSidebar);
-        sidebarOverlay.addEventListener('click', closeSidebar);
-
-        // Tutup sidebar dengan tombol Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && sidebarElement.classList.contains('open')) {
-                closeSidebar();
-            }
-        });
-
-        // Tutup sidebar jika resize ke ukuran desktop
-        function handleResize() {
-            if (window.innerWidth > 768 && sidebarElement.classList.contains('open')) {
-                closeSidebar();
-            }
-        }
-        window.addEventListener('resize', handleResize);
-
-        // ========== INIT ==========
-        renderSidebar();
-        viewerElement.style.display = 'none';
-    })();
-</script>
+            // Init
+            renderSidebar();
+            iframeWrapper.style.display = 'none';
+        })();
+    </script>
 </body>
 </html>
