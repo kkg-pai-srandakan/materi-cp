@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Analisis Komparatif PAI · Slider</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #0d6b3d;
+            --primary-dark: #064e28;
+            --primary-light: #10b981;
+            --accent: #059669;
+            --bg-light: #f0fdf4;
+            --bg-card: #ffffff;
+            --text-dark: #1e293b;
+            --text-gray: #475569;
+            --text-muted: #64748b;
+            --border: #dcfce7;
+            --shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+            --radius: 24px;
+            --radius-sm: 12px;
+            --transition: 0.3s ease;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        html, body {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(145deg, #f0fdf4 0%, #e6f7ec 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .slider {
+            width: 100%;
+            max-width: 960px;
+            height: 100%;
+            max-height: 850px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            position: relative;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .slides-container {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            background: #fff;
+            border-radius: var(--radius) var(--radius) 0 0;
+            overflow: hidden;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            padding: 1.8rem 1.8rem 1.5rem;
+            transition: opacity 0.5s ease, transform 0.3s ease;
+            transform: translateY(10px);
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            position: relative;
+        }
+        /* Cover */
+        .cover {
+            background: linear-gradient(135deg, #064e28 0%, #0d6b3d 60%, #0f7a44 100%);
+            color: white;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+        .cover .cover-icon {
+            font-size: 3.2rem;
+            margin-bottom: 1rem;
+            color: #a7f3d0;
+        }
+        .cover h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+        .cover .subtitle {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 1.2rem;
+        }
+        .cover .date-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.12);
+            padding: 0.5rem 1.6rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .page-marker {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent);
+            background: #ecfdf5;
+            display: inline-block;
+            padding: 0.15rem 0.9rem;
+            border-radius: 30px;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            width: fit-content;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0.2rem 0 0.6rem;
+            border-bottom: 3px solid #dcfce7;
+            padding-bottom: 0.25rem;
+        }
+        .table-wrap {
+            margin: 0.3rem 0 0.3rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #fafcfa;
+            overflow-x: auto;
+            max-height: 100%;
+        }
+        .table-caption {
+            padding: 0.35rem 0.9rem;
+            background: #f0fdf4;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: 0.02em;
+            border-bottom: 1px solid var(--border);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.7rem;
+            table-layout: auto;
+            min-width: 600px;
+        }
+        thead { background: #e6f7ec; }
+        th {
+            padding: 0.45rem 0.4rem;
+            text-align: left;
+            font-weight: 700;
+            color: #14532d;
+            font-size: 0.65rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            border-bottom: 2px solid #bbf7d0;
+        }
+        td {
+            padding: 0.4rem 0.4rem;
+            border-bottom: 1px solid #dcfce7;
+            vertical-align: top;
+            background: #ffffff;
+            line-height: 1.3;
+            font-size: 0.68rem;
+        }
+        tr:last-child td { border-bottom: none; }
+        td:first-child {
+            font-weight: 700;
+            color: #0f3b24;
+            background: #f4fbf7;
+            width: 14%;
+        }
+        td:nth-child(2),
+        td:nth-child(3) { width: 30%; }
+        td:last-child {
+            width: 26%;
+            background: #f9fdf9;
+            font-weight: 500;
+            color: #1e3b2f;
+        }
+        .change {
+            color: #047857;
+            font-weight: 700;
+            background: #d1fae5;
+            padding: 0.05rem 0.2rem;
+            border-radius: 3px;
+        }
+        .change-bg {
+            background: #f0fdf4;
+        }
+        .conclusion-box {
+            background: #ecfdf5;
+            border-radius: 16px;
+            padding: 1.2rem 1.6rem;
+            margin: 0.5rem 0 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #a7f3d0;
+        }
+        .conclusion-box .icon {
+            font-size: 2rem;
+            background: #d1fae5;
+            padding: 0.3rem 0.7rem;
+            border-radius: 40px;
+        }
+        .conclusion-box .text {
+            flex: 1;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #14532d;
+        }
+        .legend {
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            color: #3b5c3b;
+            background: #f4fbf7;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+        }
+        /* Footer navigasi */
+        .slider-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.7rem 1.5rem;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            gap: 1rem;
+            flex-shrink: 0;
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+        .nav-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #334155;
+            padding: 0.5rem 1.3rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .nav-btn:hover {
+            background: #f0fdf4;
+            border-color: #a7f3d0;
+            color: var(--primary);
+        }
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+        }
+        .dot.active {
+            background: var(--primary);
+            width: 12px;
+            height: 12px;
+            transform: scale(1.2);
+            box-shadow: 0 0 0 3px rgba(13, 107, 61, 0.2);
+        }
+        @media (max-width: 700px) {
+            body { padding: 0.5rem; }
+            .slider { max-height: 100%; border-radius: var(--radius-sm); }
+            .slide { padding: 1.2rem 0.8rem; }
+            .cover h2 { font-size: 1.5rem; }
+            .section-title { font-size: 1rem; }
+            table { font-size: 0.6rem; min-width: 500px; }
+            th { font-size: 0.55rem; }
+            .slider-footer { padding: 0.5rem 0.8rem; }
+            .nav-btn { padding: 0.4rem 0.9rem; font-size: 0.7rem; }
+        }
+        @media (max-width: 500px) {
+            .nav-btn span { display: none; }
+            .nav-btn { padding: 0.4rem; border-radius: 50%; width: 34px; height: 34px; justify-content: center; }
+            .page-marker { font-size: 0.55rem; }
+            .section-title { font-size: 0.85rem; }
+            table { font-size: 0.55rem; min-width: 420px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="slider" id="slider">
+        <div class="slides-container" id="slidesContainer">
+            <!-- Slide 0: Cover -->
+            <div class="slide cover active">
+                <div class="cover-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                <h2>Analisis Komparatif PAI</h2>
+                <div class="subtitle">Keputusan BSKAP 2025 vs BKPDM 2026</div>
+                <p style="color:rgba(255,255,255,0.85); margin-bottom:1rem;">Bedah Tuntas Rasional, Karakteristik, dan Capaian Pembelajaran Fase A–C</p>
+                <div class="date-display" id="dateDisplay">
+                    <i class="fa-regular fa-calendar"></i> <span id="dateText"></span>
+                </div>
+            </div>
+
+            <!-- Slide 1: Pergeseran Paradigma (halaman 1-2) -->
+            <div class="slide">
+                <div class="page-marker">Halaman 1–2</div>
+                <div class="section-title">Pergeseran Paradigma</div>
+                <h2 style="font-size:1.3rem; font-weight:700; color:var(--primary-dark); margin-top:-0.1rem;">Dari Pasif ke Aktif</h2>
+                <div style="background:#f0fdf4; padding:1.2rem 1.5rem; border-radius:16px; margin:0.5rem 0; border-left:6px solid var(--primary);">
+                    <p style="font-size:0.9rem; font-weight:500; color:#064e28;">
+                        Kurikulum terbaru 2026 secara fundamental merombak struktur kompetensi murid. Penggunaan Kata Kerja Operasional (KKO) yang pasif seperti <strong>"memahami"</strong> digantikan dengan instruksi spesifik.
+                    </p>
+                    <p style="margin-top:0.6rem; font-size:0.85rem; color:#14532d;">
+                        Tuntutan kurikulum kini beralih pada kemampuan nyata: <strong>membaca, menulis, membedakan, menerapkan, dan menceritakan.</strong> Ini bukan sekadar pembaruan teks, melainkan instruksi mutlak untuk merancang pembelajaran yang berpusat pada aksi dan unjuk kerja.
+                    </p>
+                </div>
+                <div style="display:flex; gap:0.6rem; align-items:center; margin-top:0.5rem; flex-wrap:wrap;">
+                    <span style="background:#d1fae5; padding:0.25rem 0.8rem; border-radius:40px; font-size:0.7rem; font-weight:600; color:#064e28;">📌 Perubahan ditandai hijau & tebal</span>
+                    <span style="background:#d1fae5; padding:0.25rem 0.8rem; border-radius:40px; font-size:0.7rem; font-weight:600; color:#064e28;">🔄 Geser atau klik navigasi</span>
+                </div>
+            </div>
+
+            <!-- Slide 2: Rasional & Tujuan -->
+            <div class="slide">
+                <div class="page-marker">Halaman 3</div>
+                <div class="section-title">Perbandingan Rasional & Tujuan PAI</div>
+                <div class="table-wrap">
+                    <div class="table-caption">📋 Tabel 1 — Rasional dan Tujuan</div>
+                    <table>
+                        <thead><tr><th>Aspek</th><th>Dokumen 2025 (BSKAP No. 046)</th><th>Dokumen 2026 (BKPDM No. 020)</th><th>Analisis Perbedaan</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>Rasional</td>
+                                <td>"...mencakup hubungan manusia dengan Allah Swt., sesama manusia, dan lingkungan alam. Untuk itu, perlu pendekatan beragam yang berpihak pada murid."</td>
+                                <td>"...diperkaya dengan <span class="change">lima dimensi cinta (cinta Allah dan Rasul-Nya, ilmu, lingkungan, diri dan sesama, tanah air).</span> Selain itu, <span class="change">paradigma pembelajaran mendalam</span> juga memberikan penguatan..."</td>
+                                <td>Instruksi abstrak "pendekatan beragam" dihapus, diganti kewajiban menerapkan paradigma pembelajaran mendalam dan integrasi 5 dimensi cinta.</td>
+                            </tr>
+                            <tr>
+                                <td>Tujuan (Poin 4)</td>
+                                <td>"mampu bernalar kritis dalam menganalisis perbedaan pendapat sehingga berperilaku moderat (wasatiyyah);"</td>
+                                <td>"mampu bernalar kritis dalam menganalisis perbedaan pendapat sehingga berperilaku moderat (wasatiyyah) <span class="change">dan kasih sayang untuk semesta (rahmat li al- alamin);</span>"</td>
+                                <td>Penambahan frasa kasih sayang menegaskan bahwa sikap moderat harus terwujud dalam tindakan aktif dan welas asih, tidak sekadar pasif di pikiran.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Slide 3: Karakteristik Elemen -->
+            <div class="slide">
+                <div class="page-marker">Halaman 4</div>
+                <div class="section-title">Karakteristik Elemen Utama</div>
+                <div class="table-wrap">
+                    <div class="table-caption">📋 Tabel 2 — Karakteristik Elemen</div>
+                    <table>
+                        <thead><tr><th>Elemen</th><th>Dokumen 2025 (BSKAP No. 046)</th><th>Dokumen 2026 (BKPDM No. 020)</th><th>Analisis Perbedaan</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>Al-Qur'an Hadis</td>
+                                <td>"Pendidikan Agama Islam dan Budi Pekerti menekankan pemahaman Al-Qur'an dan hadis secara tekstual dan kontekstual yang teraktualisasikan sebagai nilai kehidupan."</td>
+                                <td>"Pendidikan Agama Islam dan Budi Pekerti menekankan kompetensi <span class="change">membaca, menulis,</span> dan memahami Al-Qur'an dan hadis secara tekstual dan kontekstual yang teraktualisasikan sebagai nilai kehidupan."</td>
+                                <td>Fokus bergeser dari sekadar penguasaan makna menuju penguasaan keterampilan teknis literasi agama secara konkret (membaca & menulis huruf Arab).</td>
+                            </tr>
+                            <tr>
+                                <td>Akidah & Akhlak</td>
+                                <td>Menekankan pada prinsip keyakinan, melakukan amal saleh, serta pengelompokan perilaku terpuji dan tercela.</td>
+                                <td>Menekankan pada prinsip keyakinan, melakukan amal saleh, serta pengelompokan perilaku terpuji dan tercela.</td>
+                                <td>Tidak ada perbedaan teks fundamental pada deskripsi konseptual elemen ini.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Slide 4: CP Fase A lengkap -->
+            <div class="slide">
+                <div class="page-marker">Halaman 5–6</div>
+                <div class="section-title">CP Fase A: Kelas I dan II</div>
+                <div class="table-wrap">
+                    <div class="table-caption">📋 Tabel 3 — Capaian Pembelajaran Fase A (lengkap)</div>
+                    <table>
+                        <thead><tr><th>Elemen</th><th>Dokumen 2025</th><th>Dokumen 2026</th><th>Analisis Perbedaan</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>Al-Qur'an Hadis</td>
+                                <td>Memahami huruf hijaiah berharakat, huruf hijaiah bersambung, Surah al-Fatihah, beberapa surah pendek Al-Qur'an, dan hadis tentang kebersihan.</td>
+                                <td><span class="change">Membaca dan membedakan</span> huruf hijaiah berharakat, huruf hijaiah bersambung; <span class="change">menghafal</span> Surah al-Fatihah, beberapa surah pendek Al-Qur'an, dan hadis tentang kebersihan.</td>
+                                <td>KKO pasif "Memahami" dibongkar menjadi instruksi spesifik: Membaca, membedakan, dan menghafal. Sangat terukur.</td>
+                            </tr>
+                            <tr>
+                                <td>Akidah</td>
+                                <td>Memahami rukun iman, iman kepada Allah Swt., beberapa asmaulhusna, dan iman kepada malaikat.</td>
+                                <td><span class="change">Menjelaskan dan meyakini</span> rukun iman, iman kepada Allah Swt., beberapa asmaulhusna, dan iman kepada malaikat.</td>
+                                <td>Tuntutan berkembang menjadi unjuk kemampuan kognitif (Menjelaskan) dan target afektif terdalam (Meyakini).</td>
+                            </tr>
+                            <tr>
+                                <td>Akhlak</td>
+                                <td>Memahami akhlak terhadap Allah Swt. dengan menyucikan dan memuji-Nya dan akhlak terhadap diri sendiri.</td>
+                                <td><span class="change">Menerapkan</span> akhlak terhadap Allah Swt. dengan menyucikan dan memuji-Nya, dan akhlak terhadap diri sendiri.</td>
+                                <td>Perubahan signifikan ke aksi nyata. Anak diwajibkan Menerapkan akhlak dalam keselarian, bukan sekadar tahu teorinya.</td>
+                            </tr>
+                            <tr>
+                                <td>Fikih</td>
+                                <td>Memahami rukun Islam, syahadatain, tata cara bersuci, salat fardu, azan, ikamah, zikir, dan berdoa setelah salat.</td>
+                                <td><span class="change">Menerapkan</span> rukun Islam, syahadatain, tata cara bersuci, salat fardu, zikir dan berdoa setelah salat. <span class="change" style="background:#f0f9ec;">(azan dan ikamah dihapus)</span></td>
+                                <td>Penggunaan KKO Menerapkan. Materi azan dan ikamah dihapus dari Fase A (dipindahkan ke Fase B menyesuaikan kognitif).</td>
+                            </tr>
+                            <tr>
+                                <td>Sejarah Peradaban Islam</td>
+                                <td>Memahami kisah beberapa nabi dan rasul.</td>
+                                <td><span class="change">Menceritakan</span> kisah keteladanan beberapa nabi dan rasul.</td>
+                                <td>Tuntutan unjuk kerja literasi lisan secara langsung melalui KKO Menceritakan.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Slide 5: CP Fase B lengkap -->
+            <div class="slide">
+                <div class="page-marker">Halaman 7–8</div>
+                <div class="section-title">CP Fase B: Kelas III dan IV</div>
+                <div class="table-wrap">
+                    <div class="table-caption">📋 Tabel 4 — Capaian Pembelajaran Fase B (lengkap)</div>
+                    <table>
+                        <thead><tr><th>Elemen</th><th>Dokumen 2025</th><th>Dokumen 2026</th><th>Analisis Perbedaan</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>Al-Qur'an Hadis</td>
+                                <td>Memahami beberapa surah pendek, ayat Al-Qur'an dan hadis tentang kewajiban salat dan menjaga hubungan baik dengan sesama.</td>
+                                <td><span class="change">Membaca, menulis, dan membedakan</span> huruf hijaiah bersambung; <span class="change">menghafal dan menjelaskan</span> beberapa surah pendek, hadis tentang kewajiban salat dan menjaga hubungan baik dengan sesama.</td>
+                                <td>Peningkatan tajam standar literasi dengan tambahan kewajiban menulis huruf bersambung dan rincian 5 KKO spesifik.</td>
+                            </tr>
+                            <tr>
+                                <td>Akidah</td>
+                                <td>Memahami sifat-sifat Allah Swt., beberapa asmaulhusna, iman kepada kitab-kitab Allah Swt. dan rasul-rasul Allah Swt.</td>
+                                <td><span class="change">Menjelaskan dan meyakini</span> sifat-sifat Allah Swt., iman kepada kitab-kitab Allah Swt., beberapa asmaulhusna, dan iman kepada rasul-rasul Allah Swt.</td>
+                                <td>Sama seperti Fase A, KKO diganti menjadi Menjelaskan dan meyakini untuk keseimbangan kognitif dan afektif.</td>
+                            </tr>
+                            <tr>
+                                <td>Akhlak</td>
+                                <td>Memahami akhlak terhadap Allah Swt. dengan berbaik sangka kepada-Nya, akhlak terhadap orang tua, keluarga, dan pendidik.</td>
+                                <td><span class="change">Menerapkan</span> akhlak terhadap Allah Swt. dengan berbaik sangka kepada-Nya, akhlak terhadap orang tua, keluarga, dan <span class="change">guru</span>.</td>
+                                <td>KKO Menerapkan digunakan. Pembaruan redaksional dari istilah "pendidik" menjadi "guru" yang lebih familier bagi anak SD.</td>
+                            </tr>
+                            <tr>
+                                <td>Fikih</td>
+                                <td>Memahami puasa, salat jumat dan salat sunah, balig dan tanggung jawab yang menyertainya (taklif).</td>
+                                <td><span class="change">Menerapkan azan dan ikamah,</span> salat jumat dan salat sunah; <span class="change">menjelaskan</span> balig dan tanggung jawab yang menyertainya (taklif).</td>
+                                <td>Azan dan ikamah masuk di Fase B. KKO dipilah tajam: Menerapkan untuk praktik ibadah, dan Menjelaskan untuk konsep balig.</td>
+                            </tr>
+                            <tr>
+                                <td>Sejarah Peradaban Islam</td>
+                                <td>Memahami kisah Nabi Muhammad saw. sebelum dan sesudah menjadi rasul periode Makkah.</td>
+                                <td><span class="change">Menceritakan dan menjelaskan</span> kisah Nabi Muhammad saw. sebelum dan sesudah menjadi rasul periode Makkah.</td>
+                                <td>Tuntutan KKO aktif gabungan: Menceritakan narasi dan menjelaskan hikmah/konteks di baliknya.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Slide 6: CP Fase C lengkap -->
+            <div class="slide">
+                <div class="page-marker">Halaman 9–10</div>
+                <div class="section-title">CP Fase C: Kelas V dan VI</div>
+                <div class="table-wrap">
+                    <div class="table-caption">📋 Tabel 5 — Capaian Pembelajaran Fase C (lengkap)</div>
+                    <table>
+                        <thead><tr><th>Elemen</th><th>Dokumen 2025</th><th>Dokumen 2026</th><th>Analisis Perbedaan</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td>Al-Qur'an Hadis</td>
+                                <td>Memahami beberapa surah pendek dan ayat Al-Qur'an serta hadis tentang keragaman.</td>
+                                <td><span class="change">Membaca, menulis, dan membedakan</span> huruf hijaiah bersambung; <span class="change">menjelaskan</span> beberapa surah pendek dan hadis tentang <span class="change">berbuat baik kepada orang tua, guru, dan teman</span>.</td>
+                                <td>Tema keragaman diganti dengan etika berbuat baik. Terdapat repetisi penguatan skill membaca dan menulis dari Fase B.</td>
+                            </tr>
+                            <tr>
+                                <td>Akidah</td>
+                                <td>Memahami beberapa asmaulhusna, iman kepada hari akhir, qadā dan qadr.</td>
+                                <td><span class="change">Menjelaskan dan meyakini</span> beberapa asmaulhusna, iman kepada hari akhir, iman kepada <span class="change">qada' dan qadar</span>.</td>
+                                <td>Penggunaan KKO Menjelaskan dan meyakini serta standardisasi transliterasi menjadi ejaan bahasa Indonesia "qada' dan qadar".</td>
+                            </tr>
+                            <tr>
+                                <td>Akhlak</td>
+                                <td>Memahami akhlak terhadap Allah Swt. dengan berdoa dan bertawakal kepada-Nya, akhlak terhadap teman, tetangga, non muslim, hewan, dan tumbuhan.</td>
+                                <td><span class="change">Menerapkan</span> akhlak terhadap Allah Swt. dengan berdoa dan bertawakal kepada-Nya, akhlak terhadap teman, tetangga, non muslim, hewan, dan tumbuhan.</td>
+                                <td>Kewajiban Menerapkan akhlak secara nyata di lingkungan, termasuk perbaikan penulisan ejaan "non-muslim".</td>
+                            </tr>
+                            <tr>
+                                <td>Fikih</td>
+                                <td>Memahami puasa sunah, zakat, infak, sedekah, hadiah, makanan dan minuman yang halal dan haram.</td>
+                                <td><span class="change">Menerapkan puasa wajib dan sunah,</span> makanan minuman yang halal dan haram, zakat, infak, sedekah, dan <span class="change">wakaf</span>.</td>
+                                <td>Materi "Hadiah" dihapus, diganti dengan pengenalan wakaf. Puasa sunah dilengkapi dengan puasa wajib. KKO menjadi Menerapkan.</td>
+                            </tr>
+                            <tr>
+                                <td>Sejarah Peradaban Islam</td>
+                                <td>Memahami kisah Nabi Muhammad saw. periode Madinah dan khulafaurasyidin.</td>
+                                <td><span class="change">Menceritakan dan menjelaskan</span> kisah Nabi Muhammad saw. periode Madinah dan khulafaurasyidin.</td>
+                                <td>KKO aktif Menceritakan dan menjelaskan menuntut murid mendemonstrasikan pemahaman sejarahnya secara verbal/tertulis.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Slide 7: Kesimpulan -->
+            <div class="slide">
+                <div class="page-marker">Halaman 11</div>
+                <div class="section-title">Kesimpulan Evaluasi</div>
+                <div class="conclusion-box">
+                    <div class="icon">🌿</div>
+                    <div class="text">
+                        <strong>Kurikulum 2026</strong> tidak mengubah ruang lingkup materi secara ekstrem, melainkan melakukan ketajaman pada level taksonomi.
+                        Penghapusan KKO pasif <strong>"Memahami"</strong> menjadi instruksi terukur seperti <strong>"Membaca, Menerapkan, dan Menceritakan"</strong>
+                        adalah fondasi utama yang memaksa pendidik merancang asesmen berbasis unjuk kerja dan aksi nyata di keseharian murid.
+                    </div>
+                </div>
+                <div class="legend">
+                    <span style="font-weight:600;">✅ Semua perubahan pada kolom Dokumen 2026 ditandai dengan </span><span class="change">warna hijau dan cetak tebal</span><span>.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Navigasi -->
+        <div class="slider-footer">
+            <button class="nav-btn prev" id="prevBtn"><i class="fa-solid fa-arrow-left"></i> <span>Sebelumnya</span></button>
+            <div class="dots-container" id="dotsContainer"></div>
+            <button class="nav-btn next" id="nextBtn"><span>Berikutnya</span> <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const today = new Date();
+            document.getElementById('dateText').textContent = today.toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            const slides = document.querySelectorAll('.slide');
+            const container = document.getElementById('slidesContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('dotsContainer');
+            const slider = document.getElementById('slider');
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+
+            function createDots() {
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < totalSlides; i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'dot' + (i === currentIndex ? ' active' : '');
+                    dot.setAttribute('aria-label', `Slide ${i+1}`);
+                    dot.addEventListener('click', () => goToSlide(i));
+                    dotsContainer.appendChild(dot);
+                }
+            }
+
+            function updateDots() {
+                document.querySelectorAll('.dot').forEach((d, idx) => d.classList.toggle('active', idx === currentIndex));
+            }
+
+            function setContainerHeight() {
+                const activeSlide = slides[currentIndex];
+                if (activeSlide) container.style.height = activeSlide.offsetHeight + 'px';
+            }
+
+            function goToSlide(index) {
+                if (index < 0 || index >= totalSlides) return;
+                slides.forEach((s, i) => s.classList.toggle('active', i === index));
+                currentIndex = index;
+                updateDots();
+                setContainerHeight();
+            }
+
+            function nextSlide() { goToSlide((currentIndex + 1) % totalSlides); }
+            function prevSlide() { goToSlide((currentIndex - 1 + totalSlides) % totalSlides); }
+
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight') { e.preventDefault(); nextSlide(); }
+                else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+            });
+
+            let touchStartX = 0;
+            slider.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+            slider.addEventListener('touchend', e => {
+                const diff = touchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 50) diff > 0 ? nextSlide() : prevSlide();
+            }, { passive: true });
+
+            createDots();
+            goToSlide(0);
+            setContainerHeight();
+            window.addEventListener('resize', setContainerHeight);
+        })();
+    </script>
+</body>
+</html>
