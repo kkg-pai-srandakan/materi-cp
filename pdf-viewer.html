@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penampil PDF</title>
+    <style>
+        body { margin: 0; background: #f1f5f3; display: flex; flex-direction: column; height: 100vh; }
+        #pdf-canvas { margin: auto; max-width: 100%; height: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .controls { text-align: center; padding: 8px; background: #fff; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: center; gap: 12px; align-items: center; }
+        button { background: #e7f4ec; border: 1px solid #a7d9bb; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; color: #0a4a2e; }
+        button:disabled { opacity: 0.5; cursor: default; }
+        span { font-size: 0.9rem; color: #475569; }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button id="prevPage" disabled>← Sebelumnya</button>
+        <span id="pageInfo">Halaman 0 / 0</span>
+        <button id="nextPage" disabled>Berikutnya →</button>
+    </div>
+    <canvas id="pdf-canvas"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const fileUrl = params.get('file');
+            if (!fileUrl) {
+                document.body.innerHTML = '<p style="text-align:center;margin-top:40px;">Tidak ada file PDF yang dipilih.</p>';
+                return;
+            }
+
+            // Set worker (opsional, untuk performa lebih baik)
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+            let pdfDoc = null,
+                currentPage = 1,
+                totalPages = 0;
+            const canvas = document.getElementById('pdf-canvas');
+            const ctx = canvas.getContext('2d');
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            const pageInfo = document.getElementById('pageInfo');
+
+            function renderPage(num) {
+                pdfDoc.getPage(num).then(page => {
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    page.render({ canvasContext: ctx, viewport: viewport });
+                    pageInfo.textContent = `Halaman ${num} / ${totalPages}`;
+                    prevBtn.disabled = (num <= 1);
+                    nextBtn.disabled = (num >= totalPages);
+                }).catch(err => {
+                    console.error('Gagal merender halaman:', err);
+                    pageInfo.textContent = 'Gagal memuat halaman.';
+                });
+            }
+
+            pdfjsLib.getDocument(fileUrl).promise.then(pdf => {
+                pdfDoc = pdf;
+                totalPages = pdf.numPages;
+                if (totalPages > 0) {
+                    currentPage = 1;
+                    renderPage(currentPage);
+                }
+            }).catch(err => {
+                console.error('Gagal membuka PDF:', err);
+                document.body.innerHTML = '<p style="text-align:center;margin-top:40px;">File PDF tidak dapat dibuka. Pastikan file tersedia.</p>';
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentPage <= 1) return;
+                currentPage--;
+                renderPage(currentPage);
+            });
+            nextBtn.addEventListener('click', () => {
+                if (currentPage >= totalPages) return;
+                currentPage++;
+                renderPage(currentPage);
+            });
+        })();
+    </script>
+</body>
+</html>
