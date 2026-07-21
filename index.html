@@ -493,12 +493,10 @@
             </div>
 
             <div class="viewer-wrap">
-                <!-- Pesan error/file tidak ditemukan -->
                 <div class="viewer-message" id="viewerError">
                     <i class="fa-solid fa-circle-exclamation"></i>
                     <span class="msg-text">File tidak ditemukan atau tidak dapat diakses.</span>
                 </div>
-                <!-- Iframe (tanpa sandbox untuk menghindari blokir PDF viewer) -->
                 <iframe id="documentViewer" src="about:blank" title="Penampil Dokumen"
                     allow="fullscreen"
                     loading="lazy"
@@ -522,12 +520,12 @@
 
     <script>
         (function() {
-            // Data menu
+            // Data menu (KOMA SUDAH DIPERBAIKI)
             const menuData = [{
                 category: "Materi Sosialisasi",
                 items: [
-                    { title: "Analisis Kebijakan CP BKPDM 020 Tahun 2026", icon: "fa-scale-balanced", url: "analisis-kebijakan-cp.html", type: "slide" }
-                    { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard", url: "slide-presentasi.html", type: "slide" },
+                    { title: "Analisis Kebijakan CP BKPDM 020 Tahun 2026", icon: "fa-scale-balanced", url: "analisis-kebijakan-cp.html", type: "slide" },
+                    { title: "Presentasi Perangkat PAI", icon: "fa-person-chalkboard", url: "slide-presentasi.html", type: "slide" }
                 ]
             }, {
                 category: "Contoh Referensi",
@@ -559,7 +557,6 @@
             let activeItemElement = null;
             let currentUrl = '';
 
-            // Fungsi cek file tersedia sebelum load
             async function checkFileExists(url) {
                 try {
                     const response = await fetch(url, { method: 'HEAD', cache: 'no-cache' });
@@ -569,7 +566,6 @@
                 }
             }
 
-            // Tampilkan viewer sesuai keberadaan file
             async function showViewer(item) {
                 welcomeScreen.style.display = 'none';
                 viewerElement.style.display = 'none';
@@ -577,30 +573,22 @@
                 contentToolbar.classList.remove('visible');
                 currentUrl = '';
 
-                // Update toolbar info
                 toolbarTitleText.textContent = item.title;
                 toolbarIcon.className = 'fa-solid ' + (item.type === 'pdf' ? 'fa-file-pdf' : 'fa-person-chalkboard');
 
                 const exists = await checkFileExists(item.url);
                 if (!exists) {
-                    // Tampilkan error
                     viewerError.querySelector('.msg-text').textContent = 'File tidak ditemukan: ' + item.url;
                     viewerError.classList.add('visible');
                     contentToolbar.classList.add('visible');
-                    currentUrl = ''; // tetap kosong agar tombol tidak aktif
+                    currentUrl = '';
                     return;
                 }
 
-                // File ada, tampilkan iframe
                 currentUrl = item.url;
                 contentToolbar.classList.add('visible');
                 viewerElement.src = item.url;
                 viewerElement.style.display = 'block';
-                // Fallback jika iframe macet (misal file corrupt) -> setelah 6 detik sembunyikan error
-                setTimeout(() => {
-                    // Jika iframe masih belum selesai loading (bisa cek properti?), tidak ada cara mudah.
-                    // Kita biarkan saja, karena file sudah dicek ada.
-                }, 6000);
             }
 
             function renderSidebar() {
