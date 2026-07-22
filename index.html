@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dasbor Perangkat Pembelajaran PAI</title>
+    <title>KKG PAI Kapanewon Srandakan</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -26,6 +26,12 @@
             --radius-lg: 16px;
             --transition: 0.2s ease;
             --sidebar-width: 232px;
+
+            /* Splash screen dark palette */
+            --splash-bg: #1a2a1f;
+            --splash-text: #f0f4f0;
+            --splash-muted: #d8e2d8;
+            --splash-accent: #e4d5b7;
         }
 
         * {
@@ -36,13 +42,150 @@
         }
 
         body {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            height: 100dvh;
             background-color: var(--bg-page);
             color: var(--text-dark);
             overflow: hidden;
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        /* ===== SPLASH SCREEN ===== */
+        #splash {
+            position: fixed;
+            inset: 0;
+            background-color: var(--splash-bg);
+            background-image: radial-gradient(circle at 25% 40%, rgba(255,255,255,0.025) 0%, transparent 35%),
+                              radial-gradient(circle at 75% 65%, rgba(255,255,255,0.015) 0%, transparent 40%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+            color: var(--splash-text);
+            text-align: center;
+            padding: 1.2rem;
+        }
+
+        #splash.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-content {
+            max-width: 600px;
+            width: 100%;
+            animation: floatUp 0.9s ease-out;
+        }
+
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .splash-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
+            padding: 0.4rem 1.8rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(6px);
+            color: var(--splash-muted);
+        }
+
+        .splash-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 1.4rem;
+            letter-spacing: -0.5px;
+            color: white;
+        }
+
+        .splash-subtitle {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--splash-muted);
+            margin-bottom: 2.8rem;
+            letter-spacing: 0.2px;
+            line-height: 1.5;
+        }
+
+        .splash-location {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.9rem;
+            color: var(--splash-accent);
+        }
+
+        .splash-location i {
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .splash-date {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--splash-text);
+            background: rgba(255,255,255,0.06);
+            display: inline-block;
+            padding: 0.55rem 2rem;
+            border-radius: 32px;
+            letter-spacing: 0.4px;
+            margin-top: 0.6rem;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .splash-arrow {
+            margin-top: 3.2rem;
+            font-size: 1.8rem;
+            color: rgba(255,255,255,0.45);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            transition: color 0.3s, background 0.3s;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            user-select: none;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .splash-arrow:hover {
+            color: white;
+            background: rgba(255,255,255,0.14);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* ===== DASHBOARD ===== */
+        #dashboard {
+            display: none;
+            height: 100vh;
+            height: 100dvh;
+            flex-direction: column;
+            background-color: var(--bg-page);
+        }
+
+        #dashboard.visible {
+            display: flex;
         }
 
         header {
@@ -412,6 +555,7 @@
             .category-title { padding: 0.5rem 0.9rem 0.1rem; font-size: 0.6rem; }
             header { padding: 0.45rem 1.1rem; }
             .header-text h1 { font-size: 0.98rem; }
+            .splash-title { font-size: 2.2rem; }
         }
 
         @media (max-width: 768px) {
@@ -438,6 +582,8 @@
             .placeholder .icon-circle i { font-size: 1.4rem; }
             .placeholder h2 { font-size: 0.95rem; }
             .placeholder p { font-size: 0.72rem; max-width: 240px; }
+            .splash-title { font-size: 2rem; }
+            .splash-subtitle { font-size: 0.9rem; }
         }
 
         @media (max-width: 400px) {
@@ -449,78 +595,115 @@
             .header-text .subtitle { font-size: 0.58rem; }
             .toolbar-btn { width: 25px; height: 25px; }
             footer { font-size: 0.63rem; padding: 0.4rem; }
+            .splash-title { font-size: 1.7rem; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="header-left">
-            <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" title="Menu">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-            <div class="header-text">
-                <h1>Penyusunan Perangkat Pembelajaran</h1>
-                <div class="subtitle">KKG PAI Kapanewon Srandakan</div>
+    <!-- ========== SPLASH SCREEN (DARK) ========== -->
+    <div id="splash">
+        <div class="splash-content">
+            <div class="splash-badge">Pertemuan Rutin Bulanan</div>
+            <h1 class="splash-title">KKG PAI KAPANEWON SRANDAKAN</h1>
+            <p class="splash-subtitle">Materi: Menyusun Perangkat Pembelajaran sesuai Kebijakan Terbaru</p>
+            <div class="splash-location">
+                <i class="fa-solid fa-location-dot"></i> Kantor Korwil Kapanewon Srandakan
             </div>
+            <div class="splash-date" id="splashDate"></div>
         </div>
-    </header>
-
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <div class="container">
-        <aside class="sidebar" id="sidebarMenu">
-            <div class="sidebar-logo-area">
-                <i class="fa-solid fa-book-open-reader"></i>
-                <span>Menu Navigasi</span>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <div class="content-toolbar" id="contentToolbar">
-                <div class="toolbar-title">
-                    <i class="fa-solid fa-file-lines" id="toolbarIcon"></i>
-                    <span id="toolbarTitleText">Materi</span>
-                </div>
-                <div class="toolbar-actions">
-                    <button class="toolbar-btn" id="btnOpenNewTab" title="Buka di tab baru">
-                        <i class="fa-solid fa-up-right-from-square"></i>
-                    </button>
-                    <button class="toolbar-btn" id="btnFullscreen" title="Layar penuh">
-                        <i class="fa-solid fa-expand"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="viewer-wrap">
-                <div class="viewer-message" id="viewerError">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <span class="msg-text">File tidak ditemukan atau tidak dapat diakses.</span>
-                </div>
-                <iframe id="documentViewer" src="about:blank" title="Penampil Dokumen"
-                    allow="fullscreen"
-                    loading="lazy"
-                    style="display:none;">
-                </iframe>
-
-                <div class="placeholder" id="welcomeScreen">
-                    <div class="icon-circle">
-                        <i class="fa-solid fa-folder-open"></i>
-                    </div>
-                    <h2>Pilih Materi di Sidebar</h2>
-                    <p>Materi presentasi atau dokumen referensi PDF akan ditampilkan di area ini.</p>
-                </div>
-            </div>
-        </main>
+        <div class="splash-arrow" id="startBtn">
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
     </div>
 
-    <footer>
-        Disusun oleh: Ardika Riski Rahmawan &bull; KKG PAI Kapanewon Srandakan
-    </footer>
+    <!-- ========== DASHBOARD ========== -->
+    <div id="dashboard">
+        <header>
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle" aria-label="Buka menu" title="Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="header-text">
+                    <h1>Penyusunan Perangkat Pembelajaran</h1>
+                    <div class="subtitle">KKG PAI Kapanewon Srandakan</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <div class="container">
+            <aside class="sidebar" id="sidebarMenu">
+                <div class="sidebar-logo-area">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <span>Menu Navigasi</span>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div class="content-toolbar" id="contentToolbar">
+                    <div class="toolbar-title">
+                        <i class="fa-solid fa-file-lines" id="toolbarIcon"></i>
+                        <span id="toolbarTitleText">Materi</span>
+                    </div>
+                    <div class="toolbar-actions">
+                        <button class="toolbar-btn" id="btnOpenNewTab" title="Buka di tab baru">
+                            <i class="fa-solid fa-up-right-from-square"></i>
+                        </button>
+                        <button class="toolbar-btn" id="btnFullscreen" title="Layar penuh">
+                            <i class="fa-solid fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="viewer-wrap">
+                    <div class="viewer-message" id="viewerError">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span class="msg-text">File tidak ditemukan atau tidak dapat diakses.</span>
+                    </div>
+                    <iframe id="documentViewer" src="about:blank" title="Penampil Dokumen"
+                        allow="fullscreen"
+                        loading="lazy"
+                        style="display:none;">
+                    </iframe>
+
+                    <div class="placeholder" id="welcomeScreen">
+                        <div class="icon-circle">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h2>Pilih Materi di Sidebar</h2>
+                        <p>Materi presentasi atau dokumen referensi PDF akan ditampilkan di area ini.</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            Disusun oleh: Ardika Riski Rahmawan &bull; KKG PAI Kapanewon Srandakan
+        </footer>
+    </div>
 
     <script>
         (function() {
-            // Data menu (KOMA SUDAH DIPERBAIKI)
+            // Tanggal di splash
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('id-ID', options);
+            document.getElementById('splashDate').textContent = dateStr;
+
+            // Splash -> dashboard
+            const splash = document.getElementById('splash');
+            const dashboard = document.getElementById('dashboard');
+            const startBtn = document.getElementById('startBtn');
+
+            startBtn.addEventListener('click', () => {
+                splash.classList.add('fade-out');
+                dashboard.classList.add('visible');
+                setTimeout(() => { splash.style.display = 'none'; }, 600);
+            });
+
+            // Dashboard menu & viewer logic
             const menuData = [{
                 category: "Materi Sosialisasi",
                 items: [
@@ -566,36 +749,35 @@
                 }
             }
 
-async function showViewer(item) {
-    welcomeScreen.style.display = 'none';
-    viewerElement.style.display = 'none';
-    viewerError.classList.remove('visible');
-    contentToolbar.classList.remove('visible');
-    currentUrl = '';
+            async function showViewer(item) {
+                welcomeScreen.style.display = 'none';
+                viewerElement.style.display = 'none';
+                viewerError.classList.remove('visible');
+                contentToolbar.classList.remove('visible');
+                currentUrl = '';
 
-    toolbarTitleText.textContent = item.title;
-    toolbarIcon.className = 'fa-solid ' + (item.type === 'pdf' ? 'fa-file-pdf' : 'fa-person-chalkboard');
+                toolbarTitleText.textContent = item.title;
+                toolbarIcon.className = 'fa-solid ' + (item.type === 'pdf' ? 'fa-file-pdf' : 'fa-person-chalkboard');
 
-    // Jika PDF, gunakan viewer khusus
-    let finalUrl = item.url;
-    if (item.type === 'pdf') {
-        finalUrl = 'pdf-viewer.html?file=' + encodeURIComponent(item.url);
-    }
+                let finalUrl = item.url;
+                if (item.type === 'pdf') {
+                    finalUrl = 'pdf-viewer.html?file=' + encodeURIComponent(item.url);
+                }
 
-    const exists = await checkFileExists(item.url);
-    if (!exists) {
-        viewerError.querySelector('.msg-text').textContent = 'File tidak ditemukan: ' + item.url;
-        viewerError.classList.add('visible');
-        contentToolbar.classList.add('visible');
-        currentUrl = '';
-        return;
-    }
+                const exists = await checkFileExists(item.url);
+                if (!exists) {
+                    viewerError.querySelector('.msg-text').textContent = 'File tidak ditemukan: ' + item.url;
+                    viewerError.classList.add('visible');
+                    contentToolbar.classList.add('visible');
+                    currentUrl = '';
+                    return;
+                }
 
-    currentUrl = finalUrl;
-    contentToolbar.classList.add('visible');
-    viewerElement.src = finalUrl;
-    viewerElement.style.display = 'block';
-}
+                currentUrl = finalUrl;
+                contentToolbar.classList.add('visible');
+                viewerElement.src = finalUrl;
+                viewerElement.style.display = 'block';
+            }
 
             function renderSidebar() {
                 const logoArea = sidebarElement.querySelector('.sidebar-logo-area');
